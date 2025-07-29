@@ -1,0 +1,55 @@
+<% content_for :title, "Categories" %>
+
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex flex-col gap-8 md:mr-8 justify-between items-center">
+    <h1 class="font-bold text-4xl">Categories</h1>
+    <%= link_to "New category", new_admin_category_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
+  </div>
+
+  <div id="admin_categories" class="min-w-full divide-y divide-gray-200 space-y-5">
+    <% if @admin_categories.any? %>
+      <% @admin_categories.each do |admin_category| %>
+        
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center my-10">No categories found.</p>
+    <% end %>
+  </div>
+  <div class="flex flex-col w-full md:w-1/3">
+    <div class="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
+      <div class="py-2 inline-block min-w-full">
+        <div class="overflow-x-auto">
+          <table class="min-w-full overflow-x-scroll">
+            <thead class="bg-white border-b">
+              <tr>
+                <th  scope="col" class="text-sm font-medium text-gray-800  px-6 py-4 text-left">
+                  Name
+                </th>
+                <th  scope="col" class="text-sm font-medium text-gray-800  px-6 py-4 text-left">
+                  Description
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @admin_categories.each do |c| %>
+                <tr class="bg-gray-50 border-b">
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
+                    <%= link_to c.name, edit_admin_category_path(c) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                    <%= c.description %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

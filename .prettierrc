@@ -1,0 +1,11 @@
+{
+  "plugins": ["@prettier/plugin-ruby", "@4az/prettier-plugin-html-erb"],
+  "overrides": [
+    {
+      "files": "*.html.erb",
+      "options": {
+        "parser": "html"
+      }
+    }
+  ]
+}

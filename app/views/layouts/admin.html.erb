@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ecomm</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <%= csrf_meta_tags %> 
+    <%= csp_meta_tag %> 
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %> 
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <main class="flex">
+      <nav class="flex">
+        <div class="w-64 p-4 h-screen bg-(--cor-logo) sticky top-0">
+          <div class="flex">
+            <%= image_tag '/minhalogo.png', class: 'w-16' %>
+            <h1 class="text-md items-center py-2 text-gray-50 font-bold hidden md:flex">
+              Ecommerce Admin
+            </h1>
+          </div>
+          <ul class="flex flex-col text-gray-50">
+            <li>
+              <%= link_to admin_path, class: "block hover:rounded
+              hover:bg-(--cor-logo-hover) pl-1" do %>
+                  <%= icon('fa-solid', 'gauge-high', class: "mr-2") %>
+                  <span>Dashboard</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to admin_path, class: "block hover:rounded
+              hover:bg-(--cor-logo-hover) pl-1" do %>
+                  <%= icon('fa-solid', 'cart-shopping', class: "mr-2") %>
+                  <span>Products</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to admin_categories_path, class: "block hover:rounded
+              hover:bg-(--cor-logo-hover) pl-1" do %>
+                  <%= icon('fa-solid', 'list', class: "mr-2") %>
+                  <span>Categories</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to admin_path, class: "block hover:rounded
+              hover:bg-(--cor-logo-hover) pl-1" do %>
+                  <%= icon('fa-solid', 'truck-fast', class: "mr-2") %>
+                  <span>Orders</span>
+              <% end %>
+            </li>
+        </nav>
+        <div class="p-8">
+          <%= yield %>
+        </div>
+          
+      </main>
+  </body>
+</html>
