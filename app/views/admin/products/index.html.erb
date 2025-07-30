@@ -50,7 +50,7 @@
                     <%= p.description %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    <%= p.category %>
+                    <%= p.category.name %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
                     $<%= (p.price/100.0).to_s %>
@@ -64,7 +64,7 @@
     </div>
   </div>
   </div>
+</div>
   <div class="flex flex-col gap-8 ml-8 mt-12 h-1/4 sm:w-1/5 md:mr-8 justify-between items-center">
     <h1 class="font-bold text-4xl text-(--cor-logo)">Products</h1>
     <%= link_to "New product", new_admin_product_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>
-  </div>
