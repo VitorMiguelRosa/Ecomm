@@ -1,0 +1,70 @@
+<% content_for :title, "Products" %>
+
+<div class="w-full">
+  
+
+<div id="admin_categories" class="min-w-full divide-y divide-gray-200 space-y-5">
+    <% if @admin_products.any? %>
+      <% @admin_products.each do |admin_products| %>
+        
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center my-10">No Products found.</p>
+    <% end %>
+  </div>
+  <div class="flex flex-col w-full md:w-2/3">
+    <div class=" sm:mx-0.5 lg:mx-0.5 ">
+      <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
+        <div class="">
+          <table class="min-w-full ">
+            <thead class="bg-white border-b">
+              <tr>
+                <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                  Image
+                </th>
+                <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                  Name
+                </th>
+                <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                  Description
+                </th>
+                <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                  Category
+                </th>
+                 <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                  Price
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @admin_products.each do |p| %>
+                <tr class="bg-gray-50 border-b">
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
+                    <%= p.images.any? ? image_tag(p.images.first.variant(:thumb)) : image_tag("/placeholder.png", class: "w-13 h-13") %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
+                    <%= link_to p.name, edit_admin_product_path(p) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                    <%= p.description %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                    <%= p.category %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                    $<%= (p.price/100.0).to_s %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="flex flex-col gap-8 ml-8 mt-12 h-1/4 sm:w-1/5 md:mr-8 justify-between items-center">
+    <h1 class="font-bold text-4xl text-(--cor-logo)">Products</h1>
+    <%= link_to "New product", new_admin_product_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>
+  </div>

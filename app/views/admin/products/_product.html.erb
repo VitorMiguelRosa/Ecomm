@@ -1,0 +1,22 @@
+<div id="<%= dom_id product %>" class="w-full sm:w-auto my-5 space-y-5">
+  <div>
+    <strong class="block font-medium mb-1">Name:</strong>
+    <%= product.name %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Description:</strong>
+    <%= product.description %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Price:</strong>
+    <%= product.price %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Categorie:</strong>
+    <%= product.category_id %>
+  </div>
+  <div>
+    <strong class="block font-medium mb-1">Active:</strong>
+    <%= product.active? ? "Yes" : "No" %>
+  </div>
+</div>
