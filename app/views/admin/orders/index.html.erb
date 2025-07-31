@@ -1,0 +1,29 @@
+<% content_for :title, "Orders" %>
+
+<div class=" bg-(--cor-logo) p-4 rounded-2xl text-white w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Orders</h1>
+    <%= link_to "New order", new_admin_order_path, class: "rounded-md text-white hover:text-black px-3.5 py-2.5 bg-green-500 hover:bg-green-400 block font-medium" %>
+  </div>
+
+  <div id="admin_orders" class="min-w-full divide-y divide-gray-200 space-y-5">
+    <% if @admin_orders.any? %>
+      <% @admin_orders.each do |admin_order| %>
+        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
+          <%= render admin_order %>
+          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2 text-black">
+            <%= link_to "Show", [:admin, admin_order], class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-300 inline-block font-medium" %>
+            <%= link_to "Edit", edit_admin_order_path(admin_order), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-300 inline-block font-medium" %>
+            <%= button_to "Destroy", [:admin, admin_order], method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center my-10">No orders found.</p>
+    <% end %>
+  </div>
+</div>
