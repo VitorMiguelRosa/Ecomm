@@ -21,33 +21,39 @@
               Ecommerce Admin
             </h1>
           </div>
-          <ul class="flex flex-col text-gray-50">
+          <ul class="flex flex-col text-gray-50 gap-1">
             <li>
               <%= link_to admin_path, class: "block hover:rounded
-              hover:bg-(--cor-logo-hover) pl-1" do %>
+              hover:bg-(--cor-logo-hover)  pl-3 py-2" do %>
                   <%= icon('fa-solid', 'gauge-high', class: "mr-2") %>
                   <span>Dashboard</span>
               <% end %>
             </li>
             <li>
               <%= link_to admin_products_path, class: "block hover:rounded
-              hover:bg-(--cor-logo-hover) pl-1" do %>
+              hover:bg-(--cor-logo-hover) pl-3 py-2" do %>
                   <%= icon('fa-solid', 'cart-shopping', class: "mr-2") %>
                   <span>Products</span>
               <% end %>
             </li>
             <li>
               <%= link_to admin_categories_path, class: "block hover:rounded
-              hover:bg-(--cor-logo-hover) pl-1" do %>
+              hover:bg-(--cor-logo-hover) pl-3 py-2" do %>
                   <%= icon('fa-solid', 'list', class: "mr-2") %>
                   <span>Categories</span>
               <% end %>
             </li>
             <li>
               <%= link_to admin_orders_path, class: "block hover:rounded
-              hover:bg-(--cor-logo-hover) pl-1" do %>
+              hover:bg-(--cor-logo-hover) pl-3 py-2" do %>
                   <%= icon('fa-solid', 'truck-fast', class: "mr-2") %>
                   <span>Orders</span>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to destroy_admin_session_path, data: { "turbo-method": :delete, "turbo-confirm": "Are you sure you want to sign out?" }, class: "block hover:rounded hover:bg-(--cor-logo-hover) pl-3 py-2" do %>
+                  <%= icon('fa-solid', 'sign-out', class: "mr-2") %>
+                  <span>Sign Out</span>
               <% end %>
             </li>
         </nav>

@@ -1,18 +1,35 @@
 <div id="<%= dom_id order %>" class="w-full sm:w-auto my-5 space-y-5">
   <div>
-    <strong class="block font-medium mb-1">Customer email:</strong>
+    <strong class="block font-bold mb-1">Customer email:</strong>
     <%= order.customer_email %>
   </div>
   <div>
-    <strong class="block font-medium mb-1">Fulfilled:</strong>
+    <strong class="block font-bold mb-1">Fulfilled:</strong>
     <%= order.fulfilled? ? "Yes" : "No" %>
   </div>
   <div>
-    <strong class="block font-medium mb-1">Total:</strong>
+    <strong class="block font-bold mb-1">Total:</strong>
     <%= order.total %>
   </div>
   <div>
-    <strong class="block font-medium mb-1">Address:</strong>
+    <strong class="block font-bold mb-1">Address:</strong>
     <%= order.address %>
   </div>
+
+<% if order.order_products.any? %>
+  <% order.order_products.each do |op| %>
+  <div>
+    <strong class="block font-bold mb-1 text-xl underline">Order Items:</strong>
+    <h1 class="font-bold">Product</h1>
+    <%= op.product.name %>
+    <br/>
+    <h1 class="font-bold">Size</h1>
+    <%= op.size %>
+    <br/>
+    <h1 class="font-bold">Quantity</h1>
+    <%= op.quantity %>
+  </div>
+  <% end%>
+<% end%>
+
 </div>
