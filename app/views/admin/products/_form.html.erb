@@ -46,9 +46,12 @@
     <%= form.check_box :active, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": admin_product.errors[:active].none?, "border-red-400 focus:outline-red-600": admin_product.errors[:active].any?}] %>
   </div>
 
-   <div class="my-5 flex items-center gap-2">
+   <% if admin_product.persisted? %>
     <%= link_to "Product Stock", admin_product_stocks_path(admin_product), class:"underline" %>
-   </div>
+  <% else %>
+    <%# Optional: Display a message or simply omit the link for new products %>
+    <p class="text-red-500 underline truncate hover:w-55 hover:no-underline">Save product to manage stock.</p>
+  <% end %>
 
   <div class="inline">
     <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white inline-block font-medium cursor-pointer" %>
