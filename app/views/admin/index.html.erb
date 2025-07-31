@@ -1,1 +1,90 @@
-<h1>Admin  Home</h1>
+<h1 class="text-3xl font-bold ">Dashboard</h1>
+
+<div class="flex justify-between flex-wrap mt-8 w-full items-center max-w-4xl">
+    <h2 class="text-2xl font-bold mb-4">Daily Stats</h2>
+    <div class="flex gap-10 flex-col md:flex-row justify-between w-full">
+        <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
+            <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2 text-white">Revenue</div>
+                <p class="text-gray-300 text-base">
+                    $<%= @quick_stats[:revenue] ? (@quick_stats[:revenue]/100.0).to_s : "0" %>
+                </p>
+            </div>
+        </div>
+        <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
+            <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2 text-white">Total Sales</div>
+                <p class="text-gray-300 text-base">
+                    <%= @quick_stats[:sales] ? (@quick_stats[:sales]).to_s : "0" %>
+                </p>
+            </div>
+        </div>
+        <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
+            <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2 text-white">Average Sales</div>
+                <p class="text-gray-300 text-base">
+                    $<%= @quick_stats[:avg_sale] ? (@quick_stats[:avg_sale]/100.0).to_s : "0" %>
+                </p>
+            </div>
+        </div>
+        <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
+            <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2 text-white">Average Items per Sale</div>
+                <p class="text-gray-300 text-base">
+                    <%= @quick_stats[:per_sale].to_i %>
+                </p>
+            </div>
+        </div>
+    </div>
+
+<div class=" my-8 w-full">
+    <h2 class="text-2xl text-black font-bold mb-4">Revenue</h2>
+    <div class="w-full" data-controller="dashboard" data-dashboard-revenue-value="<%= @revenue_by_day.to_json %>">
+      <canvas id="revenueChart"></canvas>
+    </div>
+</div>
+  
+<div class="flex flex-col w-full">
+    <h2 class="text-2xl text-black font-bold mb-4">Recent Unfulfilled Orders</h2>
+        <div class="overflow-x-auto rounded-xl ">
+            <table class="min-w-full bg-gray-300 " style="border-collapse: separate; border-spacing: 0;">
+                <thead>
+                    <tr class="text-gray-800">
+                        <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
+                            Order ID
+                        </th>
+                        <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
+                            Customer
+                        </th>
+                        <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
+                            Date
+                        </th>
+                        <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
+                            Amount
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    <%  @orders.each do |order| %>
+                        <tr>
+                            <td class="px-6 py-4 border-b border-gray-500">
+                                <%= link_to order.id, admin_order_path(order), class: "underline" %>
+                            </td>
+                            <td class="px-6 py-4 border-b border-gray-500">
+                                <%= order.customer_email %>
+                            </td>
+                            <td class="px-6 py-4 border-b border-gray-500">
+                                <%= order.created_at.strftime("%B  %d, %Y %H:%M") %>
+                            </td>
+                            <td class="px-6 py-4 border-b border-gray-500">
+                                $<%= (order.total/100.0).to_s %>
+                            </td>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </h2>
+</div>
+
+</div>
