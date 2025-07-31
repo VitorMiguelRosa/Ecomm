@@ -2,7 +2,7 @@
 
 <div class="flex justify-between flex-wrap mt-8 w-full items-center max-w-4xl">
     <h2 class="text-2xl font-bold mb-4">Daily Stats</h2>
-    <div class="flex gap-10 flex-col md:flex-row justify-between w-full">
+    <div class="border-1 p-2 rounded-xl flex gap-10 flex-col md:flex-row justify-between w-full">
         <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
             <div class="px-6 py-4">
                 <div class="font-bold text-xl mb-2 text-white">Revenue</div>
@@ -39,7 +39,7 @@
 
 <div class=" my-8 w-full">
     <h2 class="text-2xl text-black font-bold mb-4">Revenue</h2>
-    <div class="w-full" data-controller="dashboard" data-dashboard-revenue-value="<%= @revenue_by_day.to_json %>">
+    <div class="w-full border-1 rounded-xl p-2" data-controller="dashboard" data-dashboard-revenue-value="<%= @revenue_by_day.to_json %>">
       <canvas id="revenueChart"></canvas>
     </div>
 </div>
