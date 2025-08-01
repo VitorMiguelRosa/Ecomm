@@ -1,10 +1,58 @@
-<footer class="bg-(--cor-logo) text-white py-6">
-  <div class="container mx-auto text-center">
-    <p class="text-sm">© 2025 AlemaoDev. All rights reserved.</p>
-    <p class="text-sm">Contact me on 
-      <a href="https://www.linkedin.com/in/vitormiguelrosaportela/" class="text-blue-400 hover:underline">Linkedin</a>, 
-      <a href="https://github.com/VitorMiguelRosa" class="text-blue-400 hover:underline">GitHub</a>, and 
-      <a href="https://www.instagram.com/a13m40/" class="text-blue-400 hover:underline">Instagram</a>.
+<footer class="text-white py-6 px-8" style="background-color: var(--cor-logo);">
+  <div class="mt-12 grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
+    <div class="md:grid md:grid-cols-3 md:gap-8">
+      <div class="text-center border-r border-gray-700 pr-4">
+        <h3 class="text-md font-bold text-gray-50 tracking wider uppercase ">
+          Quick Links
+        </h3>
+        <ul class="mt-4 space-y-4">
+          <li>
+            <%= link_to "Home", root_path, class: "text-base leading-6 text-white hover:text-gray-100" %>
+          </li>
+          <li>
+            <%= link_to "Shop", root_path, class: "text-base leading-6 text-white hover:text-gray-100" %>
+          </li>
+          <li>
+            <%= link_to "Contact Us", root_path, class: "text-base leading-6 text-white hover:text-gray-100" %>
+          </li>
+        </ul>
+      </div>
+      <!--categories -->
+      <div class="mt-8 md:mt-0 text-center">
+        <h3 class="text-md font-bold text-gray-50 tracking wider uppercase">
+          Categories
+        </h3>
+        <ul class="mt-4 space-y-4">
+          <% @main_categories.each do |category| %>
+            <li>
+              <%= link_to category.name, category_path(category), class: "text-base leading-6 text-white hover:text-gray-100" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <!--social  media -->
+      <div class="mt-8 md:mt-0 text-center border-l border-gray-700 pl-4">
+        <h3 class="text-md font-bold text-gray-50 tracking wider uppercase">
+          Social Media
+        </h3>
+        <ul class="mt-4 space-y-4">
+          <li>
+            <%= link_to "LinkedIn", "https://www.linkedin.com/in/vitormiguelrosaportela/", class: "text-base leading-6 text-white hover:text-gray-100" %>
+          </li>
+          <li>
+            <%= link_to "GitHub", "https://github.com/VitorMiguelRosa", class: "text-base leading-6 text-white hover:text-gray-100" %>
+          </li>
+          <li>
+            <%= link_to "Instagram", "https://www.instagram.com/a13m40/", class: "text-base leading-6 text-white hover:text-gray-100" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!--copyright -->
+  <div class="border-t border-gray-700 mt-8 pt-6 justify-center text-center">
+    <p class="text-sm text-gray-400">
+      © 2025 AlemaoDev. All rights reserved.
     </p>
   </div>
 </footer>
