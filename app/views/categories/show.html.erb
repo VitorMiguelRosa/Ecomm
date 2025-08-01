@@ -1,0 +1,32 @@
+<h1>Category show page</h1>
+<div class="min-h-screen flex justify-center">
+  <div class="flex flex-wrap flex-col mt-6">
+    <h2 class="text-xl text-black ">
+      Filter
+    </h2>
+  </div>
+  <div class="flex flex-wrap mt-6 gap-10 flex-grow justify-center items-start">
+    <% if @products.empty? %>
+      <p class="text-2xl text-left text-black">No products found in this category.</p>
+    <% else %>
+      <% @products.each do |product| %>
+        <%= link_to root_path do %>
+          <div class="max-w-sm flex flex-col p-4 justify-center items-center">
+            <%= product.images.first ? image_tag(product.images.first.variant(:medium), class: "rounded") : image_tag("placeholder.png", class: "rounded") %>
+          </div>
+          <div class="max-w-sm flex flex-col p-4 justify-center items-center">
+            <h3 class="text-lg font-semibold text-black">
+              <%= product.name %>
+            </h3>
+            <p class="text-gray-600">
+              <%= product.description %>
+            </p>
+            <p class="text-xl font-bold text-(--cor-logo)">
+              $<%= (product.price / 100.0).to_s %>
+            </p>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
