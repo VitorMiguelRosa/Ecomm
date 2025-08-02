@@ -33,12 +33,14 @@ export default class extends Controller {
   showPopup() {
     if (this.hasPopupTarget) {
       this.popupTarget.classList.remove("hidden")
+      this.popupTarget.classList.add("flex")
     }
   }
 
   closePopup() {
     if (this.hasPopupTarget) {
       this.popupTarget.classList.add("hidden")
+      this.popupTarget.classList.remove("flex")
     }
   }
 
