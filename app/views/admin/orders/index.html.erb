@@ -1,16 +1,13 @@
 <% content_for :title, "Orders" %>
-
 <div class=" bg-(--cor-logo) p-4 rounded-2xl text-white w-full">
   <% if notice.present? %>
     <p class="py-2 px-3 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
   <% end %>
-
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Pendent Orders</h1>
     <%= link_to "New order", new_admin_order_path, class: "rounded-md text-white hover:text-black px-3.5 py-2.5 bg-green-500 hover:bg-green-400 block font-medium" %>
   </div>
-
-<div class="flex flex-col w-full md:w-2/3">
+  <div class="flex flex-col w-full md:w-2/3">
     <div class=" sm:mx-0.5 lg:mx-0.5 ">
       <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
         <div class="">
@@ -26,7 +23,7 @@
                 <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
                   Address
                 </th>
-                 <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
                   Total
                 </th>
               </tr>
@@ -44,7 +41,7 @@
                     <%= o.address %>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    $<%= (o.total/100.0).to_s %>
+                    R$<%= (o.total/100.0).to_s %>
                   </td>
                 </tr>
               <% end %>
@@ -54,60 +51,58 @@
       </div>
     </div>
   </div>
-  </div>
-
+</div>
 <div class="flex flex-col w-full md:w-2/3">
-    <div class=" sm:mx-0.5 lg:mx-0.5 ">
-      <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-        <div class="">
-<div class="flex items-center justify-center">
-    <h1 class="flex font-bold text-4xl text-white p-4 "> Fulfilled Orders</h1>
-  </div>
-
-<div class="flex flex-col w-full md:w-2/3">
-    <div class=" sm:mx-0.5 lg:mx-0.5 ">
-      <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-        <div class="">
-          <table class="min-w-full ">
-            <thead class="bg-white rounded border-b">
-              <tr>
-                <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Order ID
-                </th>
-                <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Customer Email
-                </th>
-                <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Address
-                </th>
-                 <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Total
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @fulfilled_orders.each do |o| %>
-                <tr class="bg-gray-50 border-b">
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                    <%= link_to o.id, [:admin, o], class:"underline"%>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    <%= o.customer_email %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    <%= o.address %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    $<%= (o.total/100.0).to_s %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+  <div class=" sm:mx-0.5 lg:mx-0.5 ">
+    <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
+      <div class="">
+        <div class="flex items-center justify-center">
+          <h1 class="flex font-bold text-4xl text-white p-4 "> Fulfilled Orders</h1>
+        </div>
+        <div class="flex flex-col w-full md:w-2/3">
+          <div class=" sm:mx-0.5 lg:mx-0.5 ">
+            <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
+              <div class="">
+                <table class="min-w-full ">
+                  <thead class="bg-white rounded border-b">
+                    <tr>
+                      <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                        Order ID
+                      </th>
+                      <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                        Customer Email
+                      </th>
+                      <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                        Address
+                      </th>
+                      <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+                        Total
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @fulfilled_orders.each do |o| %>
+                      <tr class="bg-gray-50 border-b">
+                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
+                          <%= link_to o.id, [:admin, o], class:"underline"%>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                          <%= o.customer_email %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                          <%= o.address %>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
+                          R$<%= (o.total/100.0).to_s %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
-</div>
-</div>

@@ -1,0 +1,18 @@
+<div class="min-h-screen flex justify-center items-start bg-gray-50 py-12">
+  <div id="errorContainer">
+  </div>
+  <div class="bg-gray-300 rounded-xl shadow-lg p-8 w-full max-w-2xl">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800 text-center">Cart Page</h1>
+    <div data-controller='cart'>
+      <div id="cart-items" class="space-y-4 mb-8"></div>
+      <div class="flex justify-between items-center border-t pt-4 mb-8">
+        <span class="text-xl font-bold text-gray-800">Total:</span>
+        <span class="text-xl font-bold text-green-600" id="total"></span>
+      </div>
+      <div class="flex gap-4 justify-center">
+        <button class="py-2 px-6 bg-(--cor-logo) hover:bg-(--cor-logo-hover) rounded text-white font-semibold transition" data-action="click->cart#checkout">Checkout</button>
+        <button class="py-2 px-6 bg-red-500 hover:bg-red-600 rounded text-white font-semibold transition" data-action="click->cart#clear">Clear Cart</button>
+      </div>
+    </div>
+  </div>
+</div>

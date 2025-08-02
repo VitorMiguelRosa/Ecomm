@@ -6,7 +6,7 @@
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2 text-white">Revenue</div>
         <p class="text-gray-300 text-base">
-          $<%= @quick_stats[:revenue] ? (@quick_stats[:revenue]/100.0).to_s : "0" %>
+          R$<%= @quick_stats[:revenue] ? (@quick_stats[:revenue]/100.0).to_s : "0" %>
         </p>
       </div>
     </div>
@@ -22,7 +22,7 @@
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2 text-white">Average Sales</div>
         <p class="text-gray-300 text-base">
-          $<%= @quick_stats[:avg_sale] ? (@quick_stats[:avg_sale]/100.0).to_s : "0" %>
+          R$<%= @quick_stats[:avg_sale] ? (@quick_stats[:avg_sale]/100.0).to_s : "0" %>
         </p>
       </div>
     </div>
@@ -74,7 +74,7 @@
                 <%= order.created_at.strftime("%B  %d, %Y %H:%M") %>
               </td>
               <td class="px-6 py-4 border-b border-gray-500">
-                $<%= (order.total/100.0).to_s %>
+                R$<%= (order.total/100.0).to_s %>
               </td>
             </tr>
           <% end %>

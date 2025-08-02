@@ -76,3 +76,5 @@ gem 'ruby-vips'
 gem "font-awesome-sass", "~> 6.5.1"
 
 gem "tailwindcss-ruby", "~> 4.1"
+
+gem "stripe", "~> 15.4"
