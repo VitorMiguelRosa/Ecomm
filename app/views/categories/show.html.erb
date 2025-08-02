@@ -1,8 +1,12 @@
-<h1>Category show page</h1>
 <div class="min-h-screen flex justify-center">
   <div class="flex flex-wrap flex-col mt-6">
     <h2 class="text-xl text-black ">
       Filter
+      <%= icon("fa-filter", 'solid') %><br/>
+      <h2 class="text-xl text-black  mb-4">Categories:</h2>
+      <% @categories.each do |category| %>
+        <%= link_to category.name, category_path(category), class: "text-black mr-2 hover:text-lg transition-all duration-200" %>
+      <% end %>
     </h2>
   </div>
   <div class="flex flex-wrap mt-6 gap-10 flex-grow justify-center items-start">
@@ -10,7 +14,7 @@
       <p class="text-2xl text-left text-black">No products found in this category.</p>
     <% else %>
       <% @products.each do |product| %>
-        <%= link_to root_path do %>
+        <%= link_to product_path(product) do %>
           <div class="max-w-sm flex flex-col p-4 justify-center items-center">
             <%= product.images.first ? image_tag(product.images.first.variant(:medium), class: "rounded") : image_tag("placeholder.png", class: "rounded") %>
           </div>

@@ -1,0 +1,31 @@
+<div class="flex justify-center gap-20 py-10">
+  <div class="flex flex-wrap max-w-lg justify-center items-center">
+    <h2 class=" font-bold text-black mb-4 text-center text-4xl w-full"><%= @product.name %></h2>
+    <div class="flex flex-col items-center">
+      <% if @product.images.any? %>
+        <div class="flex flex-wrap gap-4 justify-center mb-4">
+          <% @product.images.each do |image| %>
+            <%= image_tag(image.variant(:medium), class: "rounded") %>
+          <% end %>
+        <% else %>
+          <%= image_tag("placeholder.png", class: "rounded") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col max-w-lg">
+    <h2 class="text-lg font-bold text-(--cor-logo) mt-8">Description:</h2>
+    <p class="text-gray-600 mt-4"><%= @product.description %></p>
+    <p class="text-xl font-bold text-(--cor-logo) mt-2">
+      $<%= (@product.price / 100.0).to_s %>
+    </p>
+    <% if @stock && @stock.amount > 0 %>
+      <p class="text-green-600 font-bold mt-2">In Stock: <%= @total_stock %></p>
+    <% else %>
+      <p class="text-red-600 font-bold mt-2">Out of Stock</p>
+    <% end %>
+    <p class="text-lg font-bold text-(--cor-logo) mt-8">Size:</p>
+    <% @product.stocks.each do |stock| %>
+      <p class="bg-gray-300 px-2 py-1 rounded text-(--cor-logo) mt-4">Size <span class="font-bold text-(--cor-logo)"><%= stock.size %></span> : <span class="font-bold text-(--cor-logo)"><%= stock.amount %></span> Units</p>
+    <% end %>
+  </div>
