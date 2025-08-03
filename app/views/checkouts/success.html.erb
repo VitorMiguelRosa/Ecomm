@@ -1,1 +1,135 @@
-<h1>Success Page</h1>
+<% content_for :title, "Order Confirmed!" %>
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-2xl">
+    <% if @error %>
+      <!-- Error State -->
+      <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+          <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+        </div>
+        <h2 class="text-xl font-semibold text-red-900 mb-2">Oops! Something went wrong</h2>
+        <p class="text-red-700"><%= @error %></p>
+        <%= link_to "Return to Home", root_path, class: "mt-4 inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
+      </div>
+    <% elsif @session && @order %>
+      <!-- Success State -->
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <!-- Success Header -->
+        <div class="bg-green-50 px-6 py-8 text-center border-b">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+            <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
+          <p class="text-lg text-gray-600">Thank you for your purchase, <%= @session.customer_details.name || @session.customer_details.email.split('@').first.capitalize %>!</p>
+        </div>
+        <!-- Order Details -->
+        <div class="p-6 bg-gray-200">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Order Info -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="font-semibold text-gray-900 mb-3">Order Information</h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Order #:</span>
+                  <span class="font-medium">#<%= @order.id.to_s.rjust(6, '0') %></span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Total:</span>
+                  <span class="font-medium text-green-600">R$ <%= (@session.amount_total / 100.0).to_s %></span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Payment Status:</span>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Paid
+                  </span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Date:</span>
+                  <span class="font-medium"><%= @order.created_at.strftime("%B %d, %Y") %></span>
+                </div>
+              </div>
+            </div>
+            <!-- Shipping Info -->
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h3 class="font-semibold text-gray-900 mb-3">Shipping Information</h3>
+              <div class="text-sm">
+                <p class="font-medium text-gray-900"><%= @session.customer_details.name %></p>
+                <p class="text-gray-600"><%= @session.customer_details.email %></p>
+                <% if @order.address.present? %>
+                  <p class="text-gray-600 mt-2"><%= @order.address %></p>
+                <% end %>
+                <div class="mt-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    Processing
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Order Items -->
+          <div class="border-t pt-6">
+            <h3 class="font-semibold text-gray-900 mb-4">Order Items</h3>
+            <div class="space-y-3">
+              <% @order.order_products.includes(:product).each do |order_product| %>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <% if order_product.product.images.any? %>
+                      <%= image_tag order_product.product.images.first.variant(:thumb), 
+                          class: "h-12 w-12 rounded-lg object-cover mr-8" %>
+                    <% else %>
+                      <div class="h-12 w-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                        <span class="text-gray-400 text-xs">No Image</span>
+                      </div>
+                    <% end %>
+                    <div>
+                      <p class="font-medium text-gray-900"><%= order_product.product.name %></p>
+                      <p class="text-sm text-gray-600">
+                        <% if order_product.size.present? %>
+                          Size: <%= order_product.size %> • 
+                        <% end %>
+                        Qty: <%= order_product.quantity %>
+                      </p>
+                    </div>
+                  </div>
+                  <p class="font-medium text-gray-900">
+                    R$ <%= (order_product.product.price * order_product.quantity / 100.0).to_s %>
+                  </p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <!-- Next Steps -->
+          <div class="border-t pt-6 mt-6">
+            <div class="bg-blue-50 rounded-lg p-4">
+              <h4 class="font-semibold text-blue-900 mb-2">What happens next?</h4>
+              <ul class="text-sm text-blue-800 space-y-1">
+                <li>• You'll receive an email confirmation shortly</li>
+                <li>• We'll process your order within 1-2 business days</li>
+                <li>• You'll get a tracking number once your order ships</li>
+                <li>• Expected delivery: 5-7 business days</li>
+              </ul>
+            </div>
+          </div>
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-x-3 mt-6">
+            <%= link_to "Continue Shopping", root_path, 
+                class: "flex-1 rounded  bg-(--cor-logo) text-white text-center px-6 py-3 rounded-lg hover:bg-(--cor-logo-hover) transition duration-200 font-medium mb-2 mr-2 ml-2" %>
+            <%= link_to "View Order Details", "#", 
+                class: "flex-1 border border-gray-300 text-gray-700 text-center px-6 py-3 rounded hover:bg-gray-50 transition duration-200 font-medium mb-2 mr-2 ml-2" %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <!-- Loading/Default State -->
+      <div class="bg-white shadow-lg rounded-lg p-8 text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Processing your order...</h2>
+        <p class="text-gray-600">Please wait while we confirm your payment.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,1 +1,1 @@
-require 'pagy/extras/tailwind'
+require 'pagy/extras/bootstrap'

@@ -23,10 +23,14 @@ class CheckoutsController < ApplicationController
       }
     end
 
+    # Set Stripe API key
+    stripe_secret_key = Rails.application.credentials.dig(:stripe, :secret_key)
+    Stripe.api_key = stripe_secret_key
+
     session = Stripe::Checkout::Session.create(
       mode: "payment",
       line_items: line_items,
-      success_url: "http://localhost:3000/success",
+      success_url: "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",  # Added session_id parameter
       cancel_url: "http://localhost:3000/cancel",
       shipping_address_collection: {
         allowed_countries: ['BR']
@@ -37,11 +41,30 @@ class CheckoutsController < ApplicationController
   end
 
   def success
-    render :success
+    @session_id = params[:session_id]
+    
+    if @session_id
+      # Retrieve the Stripe session to get order details
+      stripe_secret_key = Rails.application.credentials.dig(:stripe, :secret_key)
+      Stripe.api_key = stripe_secret_key
+      
+      begin
+        @session = Stripe::Checkout::Session.retrieve(@session_id)
+        
+        # Find the order created by the webhook
+        @order = Order.find_by(
+          customer_email: @session.customer_details.email, 
+          total: @session.amount_total,
+          created_at: 5.minutes.ago..Time.current
+        )
+      rescue Stripe::StripeError => e
+        Rails.logger.error "Stripe error: #{e.message}"
+        @error = "Unable to retrieve order details"
+      end
+    end
   end
 
   def cancel
     render :cancel
   end
-  
 end
