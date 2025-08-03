@@ -10,13 +10,20 @@
   <% end %>
 </div>
 <div class="flex flex-col w-full md:w-2/3">
-  <div class="flex flex-col mt-8 md:flex row items-start md:items-center justify-between w-full">
+  <div class="flex mt-8 md:flex row items-start md:items-center justify-between w-full">
     <%= form_with url: admin_products_path, method: :get, class: "flex" do |form|%>
       <%= form.text_field :query, placeholder: "Search", class: "border border-(--cor-logo) rounded-md p-2" %>
       <%= form.submit "Search", class: "ml-2 bg-(--cor-logo) text-white px-4 py-2 rounded hover:bg-(--cor-logo-hover) cursor-pointer" %>
     <% end %>
+    <%= form_with url: admin_products_path, method: :get, class: "flex" do |form| %>
+      <%= form.submit "Clear", class: "ml-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer" %>
+    <% end %>
   </div>
-  <div class=" sm:mx-0.5 lg:mx-0.5 ">
+  <div class=" sm:mx-0.5 lg:mx-0.5 justify-center items-center flex flex-col ">
+    <div class="flex flex-col gap-8 ml-8 my-12 h-20 sm:w-1/5 md:mr-8 justify-between items-center">
+      <h1 class="font-bold text-4xl text-(--cor-logo)">Products</h1>
+      <%= link_to "New product", new_admin_product_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>
+    </div>
     <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
       <div class="">
         <table class="min-w-full ">
@@ -68,6 +75,3 @@
 </div>
 </div>
 </div>
-<div class="flex flex-col gap-8 ml-8 mt-12 h-1/4 sm:w-1/5 md:mr-8 justify-between items-center">
-  <h1 class="font-bold text-4xl text-(--cor-logo)">Products</h1>
-  <%= link_to "New product", new_admin_product_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>

@@ -58,6 +58,12 @@ export default class extends Controller {
 
     const csrfToken = document.querySelector("[name='csrf-token']").content
 
+    // Limpar mensagens de erro anteriores
+    const errorContainer = document.getElementById("errorContainer")
+    errorContainer.innerHTML = ""
+    
+    console.log("Enviando checkout com:", payload) // DEBUG
+
     fetch("/checkout", {
       method: "POST",
       headers: {
@@ -66,19 +72,44 @@ export default class extends Controller {
       },
       body: JSON.stringify(payload)
     }).then(response => {
+        console.log("Response status:", response.status) // DEBUG
+        console.log("Response ok:", response.ok) // DEBUG
+        
         if (response.ok) {
-          
           response.json().then(body => {
+            console.log("Success body:", body) // DEBUG
             window.location.href = body.url
           })
         } else {
-          response.json().then(body => {
-            const errorEl = document.createElement("div")
-            errorEl.innerText = `There was an error processing your order. ${body.error}`
-            let errorContainer = document.getElementById("errorContainer")
-            errorContainer.appendChild(errorEl)
+          console.log("Error occurred, parsing response...") // DEBUG
+          response.text().then(text => {
+            console.log("Error response text:", text) // DEBUG
+            try {
+              const body = JSON.parse(text)
+              console.log("Error body:", body) // DEBUG
+              
+              const errorEl = document.createElement("div")
+              errorEl.classList.add("bg-red-100", "border", "border-red-400", "text-red-700", "px-4", "py-3", "rounded", "mb-4")
+              errorEl.innerHTML = `
+                <strong class="font-bold">Erro!</strong>
+                <span class="block sm:inline">${body.error || 'Houve um erro ao processar seu pedido.'}</span>
+              `
+              errorContainer.appendChild(errorEl)
+              console.log("Error element added to container") // DEBUG
+            } catch (e) {
+              console.log("Failed to parse JSON:", e) // DEBUG
+              const errorEl = document.createElement("div")
+              errorEl.classList.add("bg-red-100", "border", "border-red-400", "text-red-700", "px-4", "py-3", "rounded", "mb-4")
+              errorEl.innerHTML = `
+                <strong class="font-bold">Erro!</strong>
+                <span class="block sm:inline">Houve um erro ao processar seu pedido.</span>
+              `
+              errorContainer.appendChild(errorEl)
+            }
           })
         }
+      }).catch(error => {
+        console.log("Fetch error:", error) // DEBUG
       })
   }
 

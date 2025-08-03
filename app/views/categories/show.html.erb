@@ -3,11 +3,15 @@
     <h2 class="text-xl text-black ">
       Filter
       <%= icon("fa-filter", 'solid') %><br/>
-      <h2 class="text-xl text-black  mb-4">Categories:</h2>
-      <% @categories.each do |category| %>
-        <%= link_to category.name, category_path(category), class: "text-black mr-2 hover:text-xl transition-all duration-200 underline" %>
-      <% end %>
     </h2>
+    <%= form_with url: category_path(@category), method: :get, class: "flex flex-col"  do |form| %>
+      <%= form.number_field :min, placeholder: "Min Price", class: "border border-gray-800 rounded-md p-2 w-32" %>
+      <%= form.number_field :max, placeholder: "Max Price", class: "border border-gray-800 rounded-md p-2 mt-2 w-32" %>
+      <%= form.submit "Filter", class: "bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white rounded-md p-2 mt-2 cursor-pointer" %>
+    <% end %>
+    <%= form_with url: category_path(@category), method: :get, class: "flex flex-col" do |form| %>
+      <%= form.submit "Clear", class: "bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white rounded-md p-2 mt-2 cursor-pointer" %>
+    <% end %>
   </div>
   <div class="flex flex-wrap mt-6 gap-10 flex-grow justify-center items-start">
     <% if @products.empty? %>
