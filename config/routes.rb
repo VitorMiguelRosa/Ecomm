@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :products do
       resources :stocks
     end
-    resources :categories
+      resources :categories
   end
   devise_for :admins
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -26,5 +26,7 @@ Rails.application.routes.draw do
   get "admin" => "admin#index"
   get "cart" => "carts#show"
   post "checkout" => "checkouts#create"
-
+  get "success" => "checkouts#success"
+  get "cancel" => "checkouts#cancel"
+  post "webhook" => "webhooks#stripe"
 end
