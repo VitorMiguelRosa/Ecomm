@@ -20,3 +20,34 @@
   --cor-logo: #0b1d51;
   --cor-logo-hover: #08153b;
 }
+
+.pagy.nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.pagy.nav a {
+  padding: 0.5rem 1rem;
+  background-color: var(--cor-logo-hover);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  border: 1px solid var(--cor-logo);
+}
+
+.pagy.nav a:hover {
+  background-color: var(--cor-logo);
+  border: var(--cor-logo-hover) 1px solid;
+}
+
+.pagy.nav a.current {
+  background-color: var(--cor-logo);
+  font-weight: bold;
+}
+
+.pagy.nav a[aria-disabled="true"] {
+  background-color: #6B7280;
+  cursor: not-allowed;
+}
