@@ -1,10 +1,10 @@
-<div class="flex justify-center gap-20 py-10 h-150 items-center">
+<div class="flex justify-center gap-20 py-10 min-h-[60vh] items-center flex-col lg:flex-row">
   <div class="flex flex-wrap max-w-lg">
     <% @product.images.each do |image| %>
       <%= image_tag image, class: "w-auto h-64" %>
     <% end %>
   </div>
-  <div data-controller="products" data-products-product-value="<%= @product.to_json %>" class="flex flex-col items-start max-w-sm">
+  <div data-controller="products" data-products-product-value="<%= @product.to_json %>" class="flex flex-col items-center max-w-sm lg:items-start">
     <h1 class="font-bold text-4xl uppercase"><%= @product.name %></h1>
     <p class="text-2xl mt-4">R$<%= (@product.price/100.0).to_s %>
       <p class="text-md py-8"><%= @product.description %></p>

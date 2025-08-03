@@ -3,13 +3,13 @@
   <p class="text-lg text-center mb-8">Discover the best products at unbeatable prices.</p>
   <%= link_to "Shop Now", root_path, class: "bg-[var(--cor-logo)] text-white py-2 px-4 rounded-md hover:bg-[var(--cor-logo-hover)] hover:py-3 hover:px-5 transition-all duration-200 hover:text-lg" %>
 </div>
-<div class="flex flex-wrap justify-center items-center gap-10">
+<div class="flex flex-wrap justify-center items-center gap-10 w-80 mx-auto">
   <% @main_categories.each do |category| %>
     <%= link_to category_path(category) do %>
       <div class="flex flex-col mb-4">
         <h2 class="text-black font-medium text-lg text-center mb-6">
           <%= category.name %>
-          <%= category.image.present? ? image_tag(category.image, class: "max-w-lg") : image_tag("/placeholder.png", class: "max-w-lg") %>
+          <%= category.image.present? ? image_tag(category.image, class: "max-w") : image_tag("/placeholder.png", class: "max-w") %>
         </h2>
       </div>
     <% end %>

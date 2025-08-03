@@ -1,11 +1,11 @@
-<div class="min-h-screen flex justify-center">
+<div class="min-h-[60vh] flex flex-col lg:flex-row justify-center">
   <div class="flex flex-wrap flex-col mt-6">
     <h2 class="text-xl text-black ">
       Filter
       <%= icon("fa-filter", 'solid') %><br/>
       <h2 class="text-xl text-black  mb-4">Categories:</h2>
       <% @categories.each do |category| %>
-        <%= link_to category.name, category_path(category), class: "text-black mr-2 hover:text-lg transition-all duration-200" %>
+        <%= link_to category.name, category_path(category), class: "text-black mr-2 hover:text-xl transition-all duration-200 underline" %>
       <% end %>
     </h2>
   </div>
@@ -26,7 +26,7 @@
               <%= product.description %>
             </p>
             <p class="text-xl font-bold text-(--cor-logo)">
-              R<%= (product.price / 100.0).to_s %>
+              R$<%= (product.price / 100.0).to_s %>
             </p>
           </div>
         <% end %>
