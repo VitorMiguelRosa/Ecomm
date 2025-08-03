@@ -78,3 +78,5 @@ gem "font-awesome-sass", "~> 6.5.1"
 gem "tailwindcss-ruby", "~> 4.1"
 
 gem "stripe", "~> 15.4"
+
+gem "pagy", "~> 9.3"
