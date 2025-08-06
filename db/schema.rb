@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2025_07_31_170148) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -40,7 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_31_170148) do
   end
 
   create_table "admin_stocks", force: :cascade do |t|
-    t.integer "product_id", null: false
+    t.bigint "product_id", null: false
     t.integer "amount"
     t.string "size"
     t.datetime "created_at", null: false
@@ -68,8 +71,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_31_170148) do
   end
 
   create_table "order_products", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "order_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "order_id", null: false
     t.string "size"
     t.integer "quantity"
     t.datetime "created_at", null: false
@@ -91,7 +94,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_31_170148) do
     t.string "name"
     t.text "description"
     t.integer "price"
-    t.integer "category_id", null: false
+    t.bigint "category_id", null: false
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -99,7 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_31_170148) do
   end
 
   create_table "stocks", force: :cascade do |t|
-    t.integer "product_id", null: false
+    t.bigint "product_id", null: false
     t.integer "quantity"
     t.decimal "price"
     t.datetime "created_at", null: false
