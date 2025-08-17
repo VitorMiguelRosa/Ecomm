@@ -1,12 +1,12 @@
 <div class="flex flex-col items-center justify-center h-84 py-2">
   <h1 class="text-4xl font-bold mb-4">Welcome to Our Store</h1>
   <p class="text-lg text-center mb-8">Discover the best products at unbeatable prices.</p>
-  <%= link_to "Shop Now", root_path, class: "bg-[var(--cor-logo)] text-white py-2 px-4 rounded-md hover:bg-[var(--cor-logo-hover)] hover:py-3 hover:px-5 transition-all duration-200 hover:text-lg" %>
+  <button class="bg-[var(--cor-logo)] text-white py-2 px-4 rounded-md hover:bg-[var(--cor-logo-hover)] hover:py-3 hover:px-5 transition-all duration-200 hover:text-lg" onclick="document.getElementById('targeterSection').scrollIntoView();">Shop Now</button>
 </div>
-<div class="flex flex-wrap justify-center items-center gap-10 w-80 mx-auto">
+<div class="flex flex-wrap justify-center items-center gap-10 w-80 mx-auto" id="targeterSection" >
   <% @main_categories.each do |category| %>
     <%= link_to category_path(category) do %>
-      <div class="flex flex-col mb-4">
+      <div class="flex flex-col mb-4" >
         <h2 class="text-black font-medium text-lg text-center mb-6">
           <%= category.name %>
           <%= category.image.present? ? image_tag(category.image, class: "max-w") : image_tag("/placeholder.png", class: "max-w") %>
@@ -16,7 +16,7 @@
   <% end %>
 </div>
 <div class="bg-gray-100 py-20 my-10">
-  <div class="container mx-auto px-6">
+  <div class="container mx-auto px-6" >
     <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
       Customer Testimonials
     </h2>
