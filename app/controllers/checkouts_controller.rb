@@ -48,7 +48,6 @@ class CheckoutsController < ApplicationController
         }
       )
 
-      # IMPORTANTE: Retornar JSON, não redirect!
       render json: { url: session.url }
       
     rescue => e
@@ -60,29 +59,77 @@ class CheckoutsController < ApplicationController
 
   def success
     @session_id = params[:session_id]
+    Rails.logger.info "Success page - session_id: #{@session_id}"
     
     if @session_id
-      # Retrieve the Stripe session to get order details
       stripe_secret_key = Rails.application.credentials.dig(:stripe, :secret_key)
       Stripe.api_key = stripe_secret_key
       
       begin
+        Rails.logger.info "Retrieving Stripe session..."
         @session = Stripe::Checkout::Session.retrieve(@session_id)
+        Rails.logger.info "Session retrieved: #{@session.id}"
+        Rails.logger.info "Payment status: #{@session.payment_status}"
         
-        # Find the order created by the webhook
-        @order = Order.find_by(
-          customer_email: @session.customer_details.email, 
-          total: @session.amount_total,
-          created_at: 5.minutes.ago..Time.current
-        )
+        # Procurar pelo stripe_session_id
+        @order = Order.find_by(stripe_session_id: @session_id)
+        Rails.logger.info "Order search result: #{@order.inspect}"
+        
+        # Se não encontrou o pedido e o pagamento foi confirmado, criar manualmente
+        if @order.nil? && @session.payment_status == 'paid'
+          Rails.logger.info "Creating order manually since webhook didn't process it"
+          Rails.logger.info "Customer email: #{@session.customer_details.email}"
+          Rails.logger.info "Amount total: #{@session.amount_total}"
+          
+          # Obter endereço de entrega se disponível
+          address = ""
+          if @session.collected_information&.shipping_details&.address
+            addr = @session.collected_information.shipping_details.address
+            address = "#{addr.line1}, #{addr.city} - #{addr.state}, #{addr.postal_code}"
+            Rails.logger.info "Address: #{address}"
+          elsif @session.customer_details&.address
+            addr = @session.customer_details.address
+            address = "#{addr.line1}, #{addr.city} - #{addr.state}, #{addr.postal_code}"
+            Rails.logger.info "Address from customer_details: #{address}"
+          end
+          
+          begin
+            @order = Order.create!(
+              customer_email: @session.customer_details.email,
+              total: @session.amount_total,
+              address: address,
+              fulfilled: false,
+              stripe_session_id: @session_id
+            )
+            
+            Rails.logger.info "Order created successfully: #{@order.id}"
+            
+          rescue => order_error
+            Rails.logger.error "Error creating order: #{order_error.class} - #{order_error.message}"
+            Rails.logger.error order_error.backtrace.join("\n")
+            @error = "Error creating order: #{order_error.message}"
+          end
+        elsif @order.nil?
+          Rails.logger.warn "Payment status is not 'paid': #{@session.payment_status}"
+        end
+        
+        Rails.logger.info "Final order state: #{@order&.id}"
+        
       rescue Stripe::StripeError => e
         Rails.logger.error "Stripe error: #{e.message}"
         @error = "Unable to retrieve order details"
+      rescue => e
+        Rails.logger.error "Error in success action: #{e.class} - #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+        @error = "Error processing order: #{e.message}"
       end
+    else
+      Rails.logger.warn "No session_id provided"
+      @error = "No session ID provided"
     end
   end
 
   def cancel
-    render :cancel
+    # Método para página de cancelamento
   end
 end
