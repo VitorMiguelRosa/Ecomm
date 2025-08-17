@@ -1,7 +1,10 @@
 <div class="flex flex-col items-center justify-center h-84 py-2">
   <h1 class="text-4xl font-bold mb-4">Welcome to Our Store</h1>
   <p class="text-lg text-center mb-8">Discover the best products at unbeatable prices.</p>
-  <button class="bg-[var(--cor-logo)] text-white py-2 px-4 rounded-md hover:bg-[var(--cor-logo-hover)] hover:py-3 hover:px-5 transition-all duration-200 hover:text-lg" onclick="document.getElementById('targeterSection').scrollIntoView();">Shop Now</button>
+  <button class="bg-[var(--cor-logo)] text-white py-2 px-4 rounded-md hover:bg-[var(--cor-logo-hover)] hover:py-3 hover:px-5 transition-all duration-200 hover:text-lg"
+    onclick="document.getElementById('targeterSection').scrollIntoView({ behavior: 'smooth' });">
+    Shop Now
+  </button>
 </div>
 <div class="flex flex-wrap justify-center items-center gap-10 w-80 mx-auto" id="targeterSection" >
   <% @main_categories.each do |category| %>
