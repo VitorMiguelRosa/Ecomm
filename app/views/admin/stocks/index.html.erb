@@ -1,29 +1,74 @@
 <% content_for :title, "Stocks" %>
 
-<div class="w-full">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="mb-6">
+      <p class="py-2 px-3 bg-green-50 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    </div>
   <% end %>
-
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Stocks</h1>
-    <%= link_to "New stock", new_admin_product_stock_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>
+  
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+    <div class="flex flex-col items-center sm:items-start mb-4 sm:mb-0">
+      <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) mb-4">Stock Management</h1>
+      <%= link_to "New stock", new_admin_product_stock_path, class: "rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+    </div>
   </div>
 
-  <div id="admin_stocks" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @admin_stocks.any? %>
-      <% @admin_stocks.each do |admin_stock| %>
-        <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
-          <%= render admin_stock %>
-          <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <%= link_to "Show", admin_product_stock_path(@product, admin_stock), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= link_to "Edit", edit_admin_product_stock_path(@product, admin_stock), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Destroy", [:admin, @product, admin_stock], method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+  <!-- Stocks Section -->
+  <% if @admin_stocks.any? %>
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+      <!-- Mobile Cards (visible on small screens) -->
+      <div class="xl:hidden">
+        <% @admin_stocks.each do |admin_stock| %>
+          <div class="mobile-card border-b border-gray-200 p-4">
+            <div class="mb-4">
+              <%= render admin_stock %>
+            </div>
+            <div class="flex flex-col space-y-2">
+              <%= link_to "Show", admin_product_stock_path(@product, admin_stock), class: "w-full text-center rounded-md px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors" %>
+              <%= link_to "Edit", edit_admin_product_stock_path(@product, admin_stock), class: "w-full text-center rounded-md px-3 py-2 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+              <%= button_to "Delete", [:admin, @product, admin_stock], method: :delete, class: "w-full rounded-md px-3 py-2 text-white bg-red-600 hover:bg-red-700 font-medium cursor-pointer transition-colors", data: { turbo_confirm: "Are you sure you want to delete this stock entry?" } %>
+            </div>
           </div>
-        </div>
-      <% end %>
-    <% else %>
-      <p class="text-center my-10">No stocks found.</p>
-    <% end %>
-  </div>
+        <% end %>
+      </div>
+
+      <!-- Desktop Table (visible on large screens) -->
+      <div class="hidden xl:block overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-(--cor-logo)">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                Stock Details
+              </th>
+              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @admin_stocks.each do |admin_stock| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <%= render admin_stock %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex justify-end space-x-2">
+                    <%= link_to "Show", admin_product_stock_path(@product, admin_stock), class: "inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 transition-colors" %>
+                    <%= link_to "Edit", edit_admin_product_stock_path(@product, admin_stock), class: "inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-(--cor-logo) hover:bg-(--cor-logo-hover) transition-colors" %>
+                    <%= button_to "Delete", [:admin, @product, admin_stock], method: :delete, class: "inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 cursor-pointer transition-colors", data: { turbo_confirm: "Are you sure you want to delete this stock entry?" } %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-lg">No stock entries found.</p>
+    </div>
+  <% end %>
 </div>

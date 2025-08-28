@@ -1,10 +1,19 @@
 <% content_for :title, "Editing order" %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing order</h1>
+<div class="w-full max-w-4xl mx-auto p-0 sm:px-2 lg:px-8">
+  <!-- Header Section -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 space-y-4 lg:space-y-0">
+    <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) text-center lg:text-left">Edit Order</h1>
+    
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+      <%= link_to "Show Order", [:admin, @admin_order], class: "w-full sm:w-auto text-center rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+      <%= link_to "Back to orders", admin_orders_path, class: "w-full sm:w-auto text-center rounded-md px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium transition-colors" %>
+    </div>
+  </div>
 
-  <%= render "form", admin_order: @admin_order %>
-
-  <%= link_to "Show this order", [:admin, @admin_order], class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to orders", admin_orders_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <!-- Form Section -->
+  <div class="bg-white shadow-lg rounded-lg p-6 lg:p-8">
+    <%= render "form", admin_order: @admin_order %>
+  </div>
 </div>

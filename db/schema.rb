@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_17_145057) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_28_232225) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,6 +111,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_17_145057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_stocks_on_product_id"
+  end
+
+  create_table "testimonials", force: :cascade do |t|
+    t.string "customer_name", null: false
+    t.text "content", null: false
+    t.integer "position", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_testimonials_on_active"
+    t.index ["position"], name: "index_testimonials_on_position", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

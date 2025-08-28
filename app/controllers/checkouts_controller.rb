@@ -1,9 +1,10 @@
 class CheckoutsController < ApplicationController
   def create
     cart = params[:cart]
-    
+    cep_destino = params[:cep_destino]
     Rails.logger.info "Received cart: #{cart.inspect}"
-    
+    Rails.logger.info "Received cep_destino: #{cep_destino}"
+
     begin
       line_items = cart.map do |item|
         product = Product.find(item["id"])
@@ -30,6 +31,39 @@ class CheckoutsController < ApplicationController
               metadata: { product_id: product.id, size: item["size"], product_stock_id: product_stock.id }
             },
             unit_amount: item["price"].to_i
+          }
+        }
+      end
+
+      # Calcular frete
+      frete_valor = 0
+      if cep_destino.present?
+        begin
+          calculador = Correios::Frete::Calculador.new(
+            cep_origem: '83601-030',
+            cep_destino: cep_destino,
+            peso: 1,
+            comprimento: 20,
+            largura: 15,
+            altura: 10
+          )
+          resultado = calculador.calcular(:sedex)
+          frete_valor = (resultado.valor.to_s.gsub(",", ".").to_f * 100).to_i
+        rescue => frete_error
+          Rails.logger.error "Erro ao calcular frete: #{frete_error.message}"
+        end
+      end
+
+      if frete_valor > 0
+        line_items << {
+          quantity: 1,
+          price_data: {
+            currency: 'brl',
+            product_data: {
+              name: 'Frete',
+              metadata: { tipo: 'frete', cep_destino: cep_destino }
+            },
+            unit_amount: frete_valor
           }
         }
       end
@@ -132,4 +166,96 @@ class CheckoutsController < ApplicationController
   def cancel
     # Método para página de cancelamento
   end
+
+  def calcular_frete
+    cep_destino = params[:cep_destino].to_s.gsub(/\D/, '')
+    
+    begin
+      # Adicionar timeout personalizado
+      Timeout::timeout(3) do
+        calculador = Correios::Frete::Calculador.new(
+          cep_origem: '83601-030',
+          cep_destino: cep_destino,
+          peso: 1,
+          comprimento: 20,
+          largura: 15,
+          altura: 10
+        )
+
+        resultado = calculador.calcular(:sedex)
+        render json: { 
+          valor: resultado.valor, 
+          prazo: resultado.prazo_entrega,
+          sucesso: true 
+        }
+        return
+      end
+    rescue Net::OpenTimeout, Net::ReadTimeout, Timeout::Error => e
+      Rails.logger.error "Erro de timeout no cálculo do frete: #{e.message}"
+    rescue => e
+      Rails.logger.error "Erro no cálculo do frete: #{e.message}"
+    end
+    
+    # Fallback: Calcular frete baseado na região do CEP
+    frete_por_regiao = calcular_frete_por_regiao(cep_destino)
+    render json: { 
+      valor: frete_por_regiao[:valor], 
+      prazo: frete_por_regiao[:prazo],
+      sucesso: false,
+      erro: "Valor calculado por região (serviço dos Correios indisponível)"
+    }
+  end
+
+  private
+
+  def calcular_frete_por_regiao(cep)
+    # Remover hífen e converter para inteiro para comparação
+    cep_num = cep.to_i
+    
+    case cep_num
+    when 01000000..19999999 # São Paulo
+      { valor: "15,50", prazo: "2-3 dias úteis" }
+    when 20000000..28999999 # Rio de Janeiro  
+      { valor: "18,00", prazo: "3-4 dias úteis" }
+    when 29000000..29999999 # Espírito Santo
+      { valor: "21,00", prazo: "4-5 dias úteis" }
+    when 30000000..39999999 # Minas Gerais
+      { valor: "17,00", prazo: "3-4 dias úteis" }
+    when 40000000..48999999 # Paraná
+      { valor: "13,00", prazo: "1-2 dias úteis" } # Mesmo estado
+    when 49000000..49999999 # Santa Catarina
+      { valor: "15,00", prazo: "2-3 dias úteis" }
+    when 50000000..56999999 # Pernambuco, Alagoas
+      { valor: "28,00", prazo: "5-7 dias úteis" }
+    when 57000000..58999999 # Paraíba
+      { valor: "29,00", prazo: "5-7 dias úteis" }
+    when 59000000..59999999 # Rio Grande do Norte  
+      { valor: "30,00", prazo: "5-7 dias úteis" }
+    when 60000000..63999999 # Ceará
+      { valor: "31,00", prazo: "6-8 dias úteis" }
+    when 64000000..64999999 # Piauí
+      { valor: "33,00", prazo: "6-8 dias úteis" }
+    when 65000000..65999999 # Maranhão
+      { valor: "35,00", prazo: "7-9 dias úteis" }
+    when 70000000..72999999, 73000000..73699999 # Brasília
+      { valor: "23,00", prazo: "4-5 dias úteis" }
+    when 74000000..76999999 # Goiás
+      { valor: "25,00", prazo: "4-6 dias úteis" }
+    when 77000000..77999999 # Tocantins
+      { valor: "38,00", prazo: "7-10 dias úteis" }
+    when 78000000..78899999 # Mato Grosso
+      { valor: "31,00", prazo: "5-7 dias úteis" }
+    when 79000000..79999999 # Mato Grosso do Sul
+      { valor: "27,00", prazo: "4-6 dias úteis" }
+    when 80000000..87999999 # Paraná (outras regiões)
+      { valor: "14,00", prazo: "1-3 dias úteis" }
+    when 88000000..89999999 # Santa Catarina (outras regiões)
+      { valor: "17,00", prazo: "2-3 dias úteis" }
+    when 90000000..99999999 # Rio Grande do Sul
+      { valor: "19,00", prazo: "3-4 dias úteis" }
+    else
+      { valor: "21,00", prazo: "3-5 dias úteis" } # Valor padrão
+    end
+  end
+
 end

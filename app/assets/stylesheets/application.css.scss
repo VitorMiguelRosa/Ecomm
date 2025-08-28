@@ -17,8 +17,8 @@
 @import "font-awesome";
 
 :root {
-  --cor-logo: #0b1d51;
-  --cor-logo-hover: #08153b;
+  --cor-logo: #13bd60;
+  --cor-logo-hover: #1e861a;
 }
 
 .pagy.nav {
@@ -26,15 +26,74 @@
   justify-content: center;
   gap: 0.5rem;
   margin: 1rem 0;
+  /* Removendo scroll horizontal - navegação agora cabe na tela */
+  flex-wrap: nowrap;
+  padding: 0.5rem;
+  width: 80%;
+}
+
+/* Responsive utilities */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* Admin tables responsive improvements */
+@media (max-width: 1279px) {
+  .admin-table-mobile {
+    display: block;
+  }
+  .admin-table-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .admin-table-mobile {
+    display: none;
+  }
+  .admin-table-desktop {
+    display: block;
+  }
+}
+
+/* Better mobile card styling */
+.mobile-card {
+  transition: background-color 0.2s ease;
+}
+
+.mobile-card:hover {
+  background-color: #f9fafb;
+}
+
+/* Search form responsive improvements */
+@media (max-width: 640px) {
+  .search-form {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 
 .pagy.nav a {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   background-color: var(--cor-logo-hover);
   color: white;
   text-decoration: none;
   border-radius: 0.375rem;
   border: 1px solid var(--cor-logo);
+  /* Prevent wrapping and ensure minimum size */
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .pagy.nav a:hover {
@@ -50,4 +109,35 @@
 .pagy.nav a[aria-disabled="true"] {
   background-color: #6B7280;
   cursor: not-allowed;
+}
+
+/* Mobile specific styles for Pagy navigation */
+@media (max-width: 768px) {
+  .pagy.nav {
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    margin: 1rem auto;
+    gap: 0.25rem; /* Menor gap para mobile */
+  }
+  
+  .pagy.nav a {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.875rem;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .pagy.nav {
+    gap: 0.125rem; /* Gap ainda menor para telas muito pequenas */
+  }
+  
+  .pagy.nav a {
+    padding: 0.6rem 0.6rem;
+    font-size: 0.8rem;
+    min-width: 36px;
+    min-height: 36px;
+  }
 }

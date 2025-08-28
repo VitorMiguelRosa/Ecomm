@@ -1,86 +1,126 @@
-<h1 class="text-3xl font-bold ">Dashboard</h1>
-<div class="flex justify-between flex-wrap mt-8 w-full items-center max-w-4xl">
-  <h2 class="text-2xl font-bold mb-4">Daily Stats</h2>
-  <div class="border-1 p-2 rounded-xl flex gap-10 flex-col md:flex-row justify-between w-full">
-    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Revenue</div>
-        <p class="text-gray-300 text-base">
-          R$<%= @quick_stats[:revenue] ? (@quick_stats[:revenue]/100.0).to_s : "0" %>
-        </p>
+<div class="w-full pr-4 max-w-7xl mx-auto p-0 sm:px-2 lg:px-8">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) text-center lg:text-left">Dashboard</h1>
+  </div>
+  <!-- Daily Stats Section -->
+  <div class="mb-12">
+    <h2 class="font-bold text-2xl text-(--cor-logo) mb-6 text-center lg:text-left">Daily Stats</h2>
+    <!-- Stats Cards - Responsive Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+      <!-- Revenue Card -->
+      <div class="bg-gradient-to-t from-green-800 to-(--cor-logo) rounded-lg shadow-lg p-6">
+        <div class="text-white">
+          <h3 class="font-bold text-lg lg:text-xl mb-2">Revenue</h3>
+          <p class="text-gray-200 text-base lg:text-lg font-semibold">
+            R$ <%= @quick_stats[:revenue] ? sprintf("%.2f", @quick_stats[:revenue]/100.0) : "0.00" %>
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Total Sales</div>
-        <p class="text-gray-300 text-base">
-          <%= @quick_stats[:sales] ? (@quick_stats[:sales]).to_s : "0" %>
-        </p>
+      <!-- Total Sales Card -->
+      <div class="bg-gradient-to-t from-green-800 to-(--cor-logo) rounded-lg shadow-lg p-6">
+        <div class="text-white">
+          <h3 class="font-bold text-lg lg:text-xl mb-2">Total Sales</h3>
+          <p class="text-gray-200 text-base lg:text-lg font-semibold">
+            <%= @quick_stats[:sales] ? @quick_stats[:sales].to_s : "0" %>
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Average Sales</div>
-        <p class="text-gray-300 text-base">
-          R$<%= @quick_stats[:avg_sale] ? (@quick_stats[:avg_sale]/100.0).to_s : "0" %>
-        </p>
+      <!-- Average Sales Card -->
+      <div class="bg-gradient-to-t from-green-800 to-(--cor-logo) rounded-lg shadow-lg p-6">
+        <div class="text-white">
+          <h3 class="font-bold text-lg lg:text-xl mb-2">Average Sales</h3>
+          <p class="text-gray-200 text-base lg:text-lg font-semibold">
+            R$ <%= @quick_stats[:avg_sale] ? sprintf("%.2f", @quick_stats[:avg_sale]/100.0) : "0.00" %>
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-t from-blue-800 to-(--cor-logo)">
-      <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2 text-white">Average Items per Sale</div>
-        <p class="text-gray-300 text-base">
-          <%= @quick_stats[:per_sale].to_i %>
-        </p>
+      <!-- Average Items per Sale Card -->
+      <div class="bg-gradient-to-t from-green-800 to-(--cor-logo) rounded-lg shadow-lg p-6">
+        <div class="text-white">
+          <h3 class="font-bold text-lg lg:text-xl mb-2">Avg Items/Sale</h3>
+          <p class="text-gray-200 text-base lg:text-lg font-semibold">
+            <%= @quick_stats[:per_sale].to_i %>
+          </p>
+        </div>
       </div>
     </div>
   </div>
-  <div class=" my-8 w-full">
-    <h2 class="text-2xl text-black font-bold mb-4">Revenue</h2>
-    <div class="w-full border-1 rounded-xl p-2" data-controller="dashboard" data-dashboard-revenue-value="<%= @revenue_by_day.to_json %>">
-      <canvas id="revenueChart"></canvas>
+  <!-- Revenue Chart Section -->
+  <div class="mb-12">
+    <h2 class="font-bold text-2xl text-(--cor-logo) mb-6 text-center lg:text-left">Revenue Chart</h2>
+    <div class="bg-white shadow-lg rounded-lg p-4 lg:p-6" data-controller="dashboard" data-dashboard-revenue-value="<%= @revenue_by_day.to_json %>">
+      <canvas id="revenueChart" class="w-full h-64 lg:h-80"></canvas>
     </div>
   </div>
-  <div class="flex flex-col w-full">
-    <h2 class="text-2xl text-black font-bold mb-4">Recent Unfulfilled Orders</h2>
-    <div class="overflow-x-auto rounded-xl border-1  shadow-4xl ">
-      <table class="min-w-full bg-gray-200 " style="border-collapse: separate; border-spacing: 0;">
-        <thead>
-          <tr class="text-gray-800">
-            <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
-              Order ID
-            </th>
-            <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
-              Customer
-            </th>
-            <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
-              Date
-            </th>
-            <th class="px-6 py-3 border-b-2 broder-gray-200 bg-gray-300">
-              Amount
-            </th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-700">
-          <%  @orders.each do |order| %>
-            <tr>
-              <td class="px-6 py-4 border-b border-gray-500">
-                <%= link_to order.id, admin_order_path(order), class: "underline" %>
-              </td>
-              <td class="px-6 py-4 border-b border-gray-500">
-                <%= order.customer_email %>
-              </td>
-              <td class="px-6 py-4 border-b border-gray-500">
-                <%= order.created_at.strftime("%B  %d, %Y %H:%M") %>
-              </td>
-              <td class="px-6 py-4 border-b border-gray-500">
-                R$<%= (order.total/100.0).to_s %>
-              </td>
-            </tr>
+  <!-- Recent Orders Section -->
+  <div class="mb-12">
+    <h2 class="font-bold text-2xl text-(--cor-logo) mb-6 text-center lg:text-left">Recent Unfulfilled Orders</h2>
+    <% if @orders.any? %>
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <!-- Mobile Cards (visible on small/medium screens) -->
+        <div class="admin-table-mobile xl:hidden">
+          <% @orders.each do |order| %>
+            <div class="mobile-card border-b border-gray-200 p-4">
+              <div class="flex flex-col space-y-2">
+                <!-- Order ID -->
+                <h3 class="text-base font-semibold text-gray-900">
+                  <%= link_to "##{order.id}", admin_order_path(order), class: "hover:text-(--cor-logo) underline" %>
+                </h3>
+                <!-- Customer Email -->
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">Customer:</span> <%= order.customer_email %>
+                </p>
+                <!-- Date -->
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">Date:</span> <%= order.created_at.strftime("%b %d, %Y %H:%M") %>
+                </p>
+                <!-- Amount -->
+                <div class="flex justify-end">
+                  <span class="text-lg font-bold text-green-600">
+                    R$ <%= sprintf("%.2f", order.total/100.0) %>
+                  </span>
+                </div>
+              </div>
+            </div>
           <% end %>
-        </tbody>
-      </table>
-    </div>
-  </h2>
-</div>
+        </div>
+        <!-- Desktop Table (visible on extra large screens) -->
+        <div class="admin-table-desktop hidden xl:block overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-(--cor-logo)">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Customer</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Amount</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @orders.each do |order| %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%= link_to "##{order.id}", admin_order_path(order), class: "text-(--cor-logo) hover:text-(--cor-logo-hover) underline" %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= order.customer_email %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= order.created_at.strftime("%B %d, %Y %H:%M") %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                    R$ <%= sprintf("%.2f", order.total/100.0) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-12 bg-white rounded-lg shadow">
+        <p class="text-gray-500 text-lg">No recent orders found.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

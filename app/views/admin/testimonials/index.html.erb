@@ -1,0 +1,63 @@
+<% content_for :title, "Customer Testimonials" %>
+
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <% if notice.present? %>
+    <div class="mb-6">
+      <p class="py-2 px-3 bg-green-50 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    </div>
+  <% end %>
+  
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+    <div class="flex flex-col items-center sm:items-start mb-4 sm:mb-0">
+      <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) mb-4">Customer Testimonials</h1>
+      <p class="text-gray-600 mb-4">Manage up to 3 customer testimonials for your homepage</p>
+      <% if @testimonials.count < 3 %>
+        <%= link_to "New Testimonial", new_admin_testimonial_path, class: "rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+      <% else %>
+        <p class="text-orange-600 font-medium">Maximum of 3 testimonials reached. Edit or delete existing ones to add new ones.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <% if @testimonials.any? %>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <% @testimonials.each do |testimonial| %>
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-(--cor-logo)">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center">
+              <div class="bg-(--cor-logo) text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                <%= testimonial.position %>
+              </div>
+              <div class="ml-3">
+                <h3 class="font-semibold text-lg text-gray-900"><%= testimonial.customer_name %></h3>
+                <span class="text-sm <%= testimonial.active? ? 'text-green-600' : 'text-red-600' %>">
+                  <%= testimonial.active? ? 'Active' : 'Inactive' %>
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <blockquote class="text-gray-700 italic mb-4 line-clamp-4">
+            "<%= testimonial.content %>"
+          </blockquote>
+          
+          <div class="flex flex-col sm:flex-row gap-2">
+            <%= link_to "Edit", edit_admin_testimonial_path(testimonial), class: "w-full sm:w-auto text-center rounded-md px-3 py-2 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors text-sm" %>
+            <%= button_to "Delete", admin_testimonial_path(testimonial), method: :delete, 
+                class: "w-full sm:w-auto rounded-md px-3 py-2 text-white bg-red-600 hover:bg-red-700 font-medium cursor-pointer transition-colors text-sm", 
+                data: { turbo_confirm: "Are you sure you want to delete this testimonial?" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-12 bg-white rounded-lg shadow">
+      <div class="text-gray-400 text-6xl mb-4">💬</div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No testimonials yet</h3>
+      <p class="text-gray-500 mb-6">Start by adding your first customer testimonial</p>
+      <%= link_to "Add First Testimonial", new_admin_testimonial_path, class: "rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+    </div>
+  <% end %>
+</div>

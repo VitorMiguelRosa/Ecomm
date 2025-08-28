@@ -1,77 +1,111 @@
 <% content_for :title, "Products" %>
-<div class="w-full">
-  <div id="admin_categories" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @admin_products.any? %>
-      <% @admin_products.each do |admin_products| %>
-      </div>
-    <% end %>
-  <% else %>
-    <p class="text-center my-10">No Products found.</p>
-  <% end %>
-</div>
-<div class="flex flex-col w-full md:w-2/3">
-  <div class="flex mt-8 md:flex row items-start md:items-center justify-between w-full">
-    <%= form_with url: admin_products_path, method: :get, class: "flex" do |form|%>
-      <%= form.text_field :query, placeholder: "Search", class: "border border-(--cor-logo) rounded-md p-2" %>
-      <%= form.submit "Search", class: "ml-2 bg-(--cor-logo) text-white px-4 py-2 rounded hover:bg-(--cor-logo-hover) cursor-pointer" %>
-    <% end %>
-    <%= form_with url: admin_products_path, method: :get, class: "flex" do |form| %>
-      <%= form.submit "Clear", class: "ml-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer" %>
-    <% end %>
-  </div>
-  <div class=" sm:mx-0.5 lg:mx-0.5 justify-center items-center flex flex-col ">
-    <div class="flex flex-col gap-8 ml-8 my-12 h-20 sm:w-1/5 md:mr-8 justify-between items-center">
-      <h1 class="font-bold text-4xl text-(--cor-logo)">Products</h1>
-      <%= link_to "New product", new_admin_product_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>
+<div class="w-full max-w-7xl mx-auto p-0 sm:px-2 lg:px-8">
+  <!-- Header Section -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 space-y-4 lg:space-y-0">
+    <div class="flex flex-col items-center lg:items-start">
+      <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) mb-4">Products</h1>
+      <%= link_to "New product", new_admin_product_path, class: "rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
     </div>
-    <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-      <div class="">
-        <table class="min-w-full ">
-          <thead class="bg-white border-b">
+    <!-- Search Section -->
+    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+      <%= form_with url: admin_products_path, method: :get, class: "search-form flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2" do |form|%>
+        <%= form.text_field :query, placeholder: "Search products...", class: "border border-(--cor-logo) rounded-md p-2 w-full sm:w-auto", value: params[:query] %>
+        <div class="flex space-x-2">
+          <%= form.submit "Search", class: "bg-(--cor-logo) text-white px-4 py-2 rounded hover:bg-(--cor-logo-hover) cursor-pointer transition-colors" %>
+          <%= link_to "Clear", admin_products_path, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <!-- Products Section -->
+  <% if @admin_products.any? %>
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+      <!-- Mobile Cards (visible on small/medium screens) -->
+      <div class="admin-table-mobile xl:hidden">
+        <% @admin_products.each do |p| %>
+          <div class="mobile-card border-b border-gray-200 p-3">
+            <div class="flex flex-col space-y-2">
+              <!-- Product Name -->
+              <h3 class="text-base font-semibold text-gray-900 ">
+                <%= link_to p.name, edit_admin_product_path(p), class: "hover:text-(--cor-logo)" %>
+              </h3>
+              <!-- Description (truncated for mobile) -->
+              <p class="text-sm text-gray-600 line-clamp-2 leading-tight">
+                <%= truncate(p.description, length: 80) %>
+              </p>
+              <!-- Category and Price Row -->
+              <div class="flex justify-between items-center pt-1">
+                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                  <%= p.category.name %>
+                </span>
+                <span class="text-sm font-bold text-green-600">
+                  R$ <%= sprintf("%.2f", p.price/100.0) %>
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <!-- Desktop Table (visible on extra large screens) -->
+      <div class="admin-table-desktop hidden xl:block overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-(--cor-logo)">
             <tr>
-              <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Image
               </th>
-              <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Name
               </th>
-              <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Description
               </th>
-              <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Category
               </th>
-              <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Price
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white divide-y divide-gray-200">
             <% @admin_products.each do |p| %>
-              <tr class="bg-gray-50 border-b">
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                  <%= p.images.any? ? image_tag(p.images.first.variant(:thumb)) : image_tag("/placeholder.png", class: "w-13 h-13") %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= p.images.any? ? image_tag(p.images.first.variant(:thumb), class: "w-12 h-12 rounded object-cover") : image_tag("/placeholder.png", class: "w-12 h-12 rounded object-cover") %>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                  <%= link_to p.name, edit_admin_product_path(p) %>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= link_to p.name, edit_admin_product_path(p), class: "text-sm font-medium text-gray-900 hover:text-(--cor-logo) hover:underline" %>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                  <%= p.description %>
+                <td class="px-6 py-4">
+                  <p class="text-sm text-gray-500 max-w-xs truncate"><%= p.description %></p>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                  <%= p.category.name %>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm text-gray-900"><%= p.category.name %></span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                  R$<%= (p.price/100.0).to_s %>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm font-semibold text-green-600">R$ <%= (p.price/100.0).to_s %></span>
                 </td>
               </tr>
             <% end %>
           </tbody>
         </table>
-        <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
       </div>
+      <!-- Pagination -->
+      <% if @pagy.pages > 1 %>
+        <div class=" py-4 border-t border-gray-200 bg-gray-50">
+          <div class="flex justify-center">
+            <%== pagy_nav_compact(@pagy) %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  </div>
-</div>
-</div>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-lg">No products found.</p>
+      <% if params[:query].present? %>
+        <p class="text-gray-400 mt-2">Try adjusting your search terms.</p>
+      <% end %>
+    </div>
+  <% end %>
 </div>

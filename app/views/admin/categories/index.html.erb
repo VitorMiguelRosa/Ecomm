@@ -1,58 +1,81 @@
 <% content_for :title, "Categories" %>
-<div class="w-full">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <div class="mb-6">
+      <p class="py-2 px-3 bg-green-50 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    </div>
   <% end %>
-  <div id="admin_categories" class="min-w-full divide-y divide-gray-200 space-y-5">
-    <% if @admin_categories.any? %>
-      <% @admin_categories.each do |admin_category| %>
+  <!-- Header Section -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+    <div class="flex flex-col items-center sm:items-start mb-4 sm:mb-0">
+      <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) mb-4">Categories</h1>
+      <%= link_to "New category", new_admin_category_path, class: "rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+    </div>
+  </div>
+  <!-- Table Section -->
+  <% if @admin_categories.any? %>
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+      <!-- Mobile Cards (visible on small screens) -->
+      <div class="admin-table-mobile md:hidden">
+        <% @admin_categories.each do |c| %>
+          <div class="mobile-card border-b border-gray-200 p-4">
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0">
+                <%= c.image.present? ? image_tag(c.image.variant(:thumb), class: "w-12 h-12 rounded") : image_tag("/placeholder.png", class: "w-12 h-12 rounded") %>
+              </div>
+              <div class="flex-grow">
+                <h3 class="text-lg font-medium text-gray-900">
+                  <%= link_to c.name, edit_admin_category_path(c), class: "hover:text-(--cor-logo)" %>
+                </h3>
+                <p class="text-sm text-gray-500 mt-1 line-clamp-2"><%= c.description %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
       </div>
-    <% end %>
-  <% else %>
-    <p class="text-center my-10">No categories found.</p>
-  <% end %>
-</div>
-<div class="flex flex-col w-full md:w-1/3">
-  <div class=" sm:mx-0.5 lg:mx-0.5">
-    <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-      <div class="">
-        <table class="min-w-full ">
-          <thead class="bg-white border-b">
+      <!-- Desktop Table (visible on medium+ screens) -->
+      <div class="admin-table-desktop hidden md:block overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-(--cor-logo)">
             <tr>
-              <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Image
               </th>
-              <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Name
               </th>
-              <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Description
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white divide-y divide-gray-200">
             <% @admin_categories.each do |c| %>
-              <tr class="bg-gray-50 border-b">
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                  <%= c.image.present? ? image_tag(c.image.variant(:thumb)) : image_tag("/placeholder.png", class: "w-13 h-13") %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= c.image.present? ? image_tag(c.image.variant(:thumb), class: "w-12 h-12 rounded") : image_tag("/placeholder.png", class: "w-12 h-12 rounded") %>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                  <%= link_to c.name, edit_admin_category_path(c) %>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <%= link_to c.name, edit_admin_category_path(c), class: "text-sm font-medium text-gray-900 hover:text-(--cor-logo) hover:underline" %>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                  <%= c.description %>
+                <td class="px-6 py-4">
+                  <p class="text-sm text-gray-500 max-w-xs truncate"><%= c.description %></p>
                 </td>
               </tr>
             <% end %>
           </tbody>
         </table>
-        <%== pagy_nav(@admin_categories_pagy) %>
       </div>
+      <!-- Pagination -->
+      <% if defined?(@admin_categories_pagy) && @admin_categories_pagy.pages > 1 %>
+        <div class="px-6 py-4 border-t border-gray-200">
+          <%== pagy_nav(@admin_categories_pagy) %>
+        </div>
+      <% end %>
     </div>
-  </div>
-</div>
-</div>
-<div class="flex flex-col gap-8 ml-8 mt-12 h-full sm:w-1/4 md:mr-8 justify-between items-center">
-  <h1 class="font-bold text-4xl text-(--cor-logo)">Categories</h1>
-  <%= link_to "New category", new_admin_category_path, class: "rounded-md px-3.5 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white block font-medium" %>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-lg">No categories found.</p>
+    </div>
+  <% end %>
 </div>

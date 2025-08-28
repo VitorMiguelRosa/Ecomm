@@ -5,9 +5,32 @@
       <div id="errorContainer" class="mt-6">
       </div>
       <div id="cart-items" class="space-y-4 mb-8"></div>
-      <div class="flex justify-between items-center border-t pt-4 mb-8">
-        <span class="text-xl font-bold text-gray-800">Total:</span>
-        <span class="text-xl font-bold text-green-600" id="total"></span>
+      <!-- Campo CEP -->
+      <div class="mb-4">
+        <label for="cep_destino" class="block text-gray-700 font-semibold mb-2">
+          CEP de entrega <span class="text-red-500">*</span>
+        </label>
+        <input type="text" id="cep_destino" name="cep_destino" maxlength="9" placeholder="00000-000"
+               class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400" 
+               data-action="input->cart#formatCep blur->cart#calcularFrete" required />
+        <p class="text-sm text-gray-600 mt-1">Digite seu CEP para calcular o frete</p>
+        <div id="frete-loading" class="mt-2 text-green-600 hidden">Calculando frete...</div>
+        <div id="frete-error" class="mt-2 text-red-600 hidden"></div>
+      </div>
+      <!-- Resumo do carrinho -->
+      <div class="border-t pt-4 mb-8">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-lg text-gray-800">Subtotal:</span>
+          <span class="text-lg text-gray-800" id="subtotal"></span>
+        </div>
+        <div class="flex justify-between items-center mb-2" id="frete-container" style="display: none;">
+          <span class="text-lg text-gray-800">Frete (Sedex):</span>
+          <span class="text-lg text-gray-800" id="frete-valor"></span>
+        </div>
+        <div class="flex justify-between items-center border-t pt-2">
+          <span class="text-xl font-bold text-gray-800">Total:</span>
+          <span class="text-xl font-bold text-green-600" id="total"></span>
+        </div>
       </div>
       <div class="flex gap-4 justify-center">
         <button class="py-2 px-6 bg-(--cor-logo) hover:bg-(--cor-logo-hover) rounded text-white font-semibold transition" data-action="click->cart#checkout">Checkout</button>

@@ -1,10 +1,6 @@
 <% content_for :title, "Order Confirmed!" %>
-
 <div class=" min-h-full bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-2xl">
-    
-    
-    
     <% if @error %>
       <!-- Error State -->
       <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -12,7 +8,6 @@
         <p class="text-red-700"><%= @error %></p>
         <%= link_to "Return to Home", root_path, class: "mt-4 inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
       </div>
-      
     <% elsif @session && @order %>
       <!-- Success State -->
       <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -29,7 +24,6 @@
             </div>
           </div>
         </div>
-        
         <div class="p-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -38,21 +32,18 @@
               <p class="text-sm text-gray-600">Total: R$ <%= @order.total_in_currency %></p>
               <p class="text-sm text-gray-600">Email: <%= @order.customer_email %></p>
             </div>
-            
             <div>
               <h3 class="text-lg font-medium text-gray-900 mb-2">What's Next?</h3>
               <p class="text-sm text-gray-600">You'll receive an email confirmation shortly.</p>
               <p class="text-sm text-gray-600">We'll notify you when your order ships.</p>
             </div>
           </div>
-          
           <div class="mt-6 flex space-x-4">
-            <%= link_to "Continue Shopping", root_path, class: "bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors" %>
+            <%= link_to "Continue Shopping", root_path, class: "bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition-colors" %>
             <%= link_to "View Order Details", "#", class: "bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300 transition-colors" %>
           </div>
         </div>
       </div>
-      
     <% elsif @session %>
       <!-- Session exists but no order found -->
       <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
@@ -60,7 +51,6 @@
         <p class="text-yellow-700">Payment confirmed but order is still being processed. Please check back in a few minutes.</p>
         <%= link_to "Return to Home", root_path, class: "mt-4 inline-block bg-yellow-600 text-white px-4 py-2 rounded" %>
       </div>
-      
     <% else %>
       <!-- No session found -->
       <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -69,6 +59,5 @@
         <%= link_to "Return to Home", root_path, class: "mt-4 inline-block bg-red-600 text-white px-4 py-2 rounded" %>
       </div>
     <% end %>
-    
   </div>
 </div>

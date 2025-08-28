@@ -1,0 +1,79 @@
+<%= form_with(model: [:admin, testimonial], local: true, class: "space-y-6") do |form| %>
+  <% if testimonial.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= pluralize(testimonial.errors.count, "error") %> prohibited this testimonial from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc list-inside">
+              <% testimonial.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div class="sm:col-span-1">
+      <%= form.label :customer_name, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.text_field :customer_name, 
+          class: "w-full rounded-md border-gray-300 shadow-sm focus:border-(--cor-logo) focus:ring-(--cor-logo) focus:ring-opacity-50",
+          placeholder: "Customer name" %>
+    </div>
+
+    <div class="sm:col-span-1">
+      <%= form.label :position, class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= form.select :position, 
+          options_for_select([[1, 1], [2, 2], [3, 3]], testimonial.position),
+          { prompt: "Select position" },
+          { class: "w-full rounded-md border-gray-300 shadow-sm focus:border-(--cor-logo) focus:ring-(--cor-logo) focus:ring-opacity-50" } %>
+      <p class="text-sm text-gray-500 mt-1">Position 1 appears first on the homepage</p>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :content, class: "block text-sm font-medium text-gray-700 mb-2" %>
+    <%= form.text_area :content, 
+        rows: 4,
+        class: "w-full rounded-md border-gray-300 shadow-sm focus:border-(--cor-logo) focus:ring-(--cor-logo) focus:ring-opacity-50",
+        placeholder: "Customer testimonial content (max 500 characters)" %>
+    <p class="text-sm text-gray-500 mt-1">
+      <span id="char-count"><%= testimonial.content&.length || 0 %></span>/500 characters
+    </p>
+  </div>
+
+  <div class="flex items-center">
+    <%= form.check_box :active, 
+        class: "h-4 w-4 text-(--cor-logo) focus:ring-(--cor-logo) border-gray-300 rounded" %>
+    <%= form.label :active, "Active (visible on homepage)", class: "ml-2 block text-sm text-gray-900" %>
+  </div>
+
+  <div class="flex justify-end space-x-3">
+    <%= link_to "Cancel", admin_testimonials_path, 
+        class: "px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-(--cor-logo)" %>
+    <%= form.submit class: "px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-(--cor-logo) hover:bg-(--cor-logo-hover) focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-(--cor-logo)" %>
+  </div>
+<% end %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const textarea = document.querySelector('#testimonial_content');
+  const charCount = document.querySelector('#char-count');
+  
+  if (textarea && charCount) {
+    textarea.addEventListener('input', function() {
+      charCount.textContent = this.value.length;
+    });
+  }
+});
+</script>

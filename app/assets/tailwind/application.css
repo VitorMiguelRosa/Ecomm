@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+/* Custom styles for admin interface */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Impedir scroll vertical na página admin */
+body.admin-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.admin-container {
+  height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+/* Container móvel com altura controlada */
+.admin-table-mobile {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.mobile-card {
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  width: 50%; /* Diminuindo o width pela metade */
+}
+
+.mobile-card:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure proper truncation for product descriptions */
+.mobile-card p {
+  max-height: 2.5em;
+  line-height: 1.25em;
+}

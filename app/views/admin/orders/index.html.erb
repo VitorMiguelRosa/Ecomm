@@ -1,111 +1,264 @@
 <% content_for :title, "Orders" %>
-<div class=" bg-(--cor-logo) p-4 rounded-2xl text-white w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
-  <% end %>
-  <div class="flex justify-between items-center">
-    <h1 class="font-bold text-4xl">Pendent Orders</h1>
-    <%= link_to "New order", new_admin_order_path, class: "rounded-md text-white hover:text-black px-3.5 py-2.5 bg-green-500 hover:bg-green-400 block font-medium" %>
+<div class="w-full max-w-7xl mx-auto p-0 sm:px-2 lg:px-8">
+  <!-- Header Section -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 space-y-4 lg:space-y-0">
+    <div class="flex flex-col items-center lg:items-start">
+      <h1 class="font-bold text-3xl sm:text-4xl text-(--cor-logo) mb-4">Orders</h1>
+      <%= link_to "New order", new_admin_order_path, class: "rounded-md px-4 py-2.5 bg-(--cor-logo) hover:bg-(--cor-logo-hover) text-white font-medium transition-colors" %>
+    </div>
   </div>
-  <div class="flex flex-col w-full md:w-2/3">
-    <div class=" sm:mx-0.5 lg:mx-0.5 ">
-      <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-        <div class="">
-          <table class="min-w-full ">
-            <thead class="bg-white rounded border-b">
+  <!-- Pending Orders Section -->
+  <div class="mb-12">
+    <h2 class="font-bold text-2xl text-(--cor-logo) mb-6">Pending Orders</h2>
+    <% if @not_fulfilled_orders.any? %>
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <!-- Mobile Cards (visible on small/medium screens) -->
+        <div class="admin-table-mobile xl:hidden">
+          <% @not_fulfilled_orders.each do |order| %>
+            <div class="mobile-card border-b border-gray-200 p-3">
+              <div class="flex flex-col space-y-2">
+                <!-- Order ID -->
+                <h3 class="text-base font-semibold text-gray-900">
+                  <%= link_to "##{order.id}", [:admin, order], class: "hover:text-(--cor-logo) underline" %>
+                </h3>
+                <!-- Customer Email -->
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">Email:</span> <%= order.customer_email %>
+                </p>
+                <!-- Items -->
+                <div class="text-sm text-gray-600">
+                  <span class="font-medium">Items:</span>
+                  <% if order.order_products.any? %>
+                    <div class="mt-1 space-y-1">
+                      <% order.order_products.limit(2).each do |op| %>
+                        <div class="text-xs bg-gray-100 rounded px-2 py-1">
+                          <%= op.product.name %> (Size: <%= op.size %>, Qty: <%= op.quantity %>)
+                        </div>
+                      <% end %>
+                      <% if order.order_products.count > 2 %>
+                        <div class="text-xs text-gray-500">
+                          +<%= order.order_products.count - 2 %> more items
+                        </div>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <span class="text-gray-400">No items</span>
+                  <% end %>
+                </div>
+                <!-- Address (truncated for mobile) -->
+                <p class="text-sm text-gray-600 line-clamp-2 leading-tight">
+                  <span class="font-medium">Address:</span> <%= truncate(order.address, length: 60) %>
+                </p>
+                <!-- Total and Status -->
+                <div class="flex justify-between items-center pt-1">
+                  <span class="text-xs text-white bg-orange-500 px-2 py-1 rounded-full">
+                    Pending
+                  </span>
+                  <span class="text-sm font-bold text-green-600">
+                    R$ <%= sprintf("%.2f", order.total/100.0) %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <!-- Desktop Table (visible on extra large screens) -->
+        <div class="admin-table-desktop hidden xl:block overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-(--cor-logo)">
               <tr>
-                <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Order ID
-                </th>
-                <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Customer Email
-                </th>
-                <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Address
-                </th>
-                <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                  Total
-                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Customer Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Items</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Address</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Total</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
               </tr>
             </thead>
-            <tbody>
-              <% @not_fulfilled_orders.each do |o| %>
-                <tr class="bg-gray-50 border-b">
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                    <%= link_to o.id, [:admin, o], class:"underline"%>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @not_fulfilled_orders.each do |order| %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%= link_to "##{order.id}", [:admin, order], class: "text-(--cor-logo) hover:text-(--cor-logo-hover) underline" %>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    <%= o.customer_email %>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= order.customer_email %>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    <%= o.address %>
+                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs">
+                    <% if order.order_products.any? %>
+                      <div class="space-y-1">
+                        <% order.order_products.limit(3).each do |op| %>
+                          <div class="text-xs bg-gray-100 rounded px-2 py-1">
+                            <span class="font-medium"><%= op.product.name %></span><br>
+                            Size: <%= op.size %>, Qty: <%= op.quantity %>
+                          </div>
+                        <% end %>
+                        <% if order.order_products.count > 3 %>
+                          <div class="text-xs text-gray-500">
+                            +<%= order.order_products.count - 3 %> more items
+                          </div>
+                        <% end %>
+                      </div>
+                    <% else %>
+                      <span class="text-gray-400">No items</span>
+                    <% end %>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                    R$<%= (o.total/100.0).to_s %>
+                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                    <%= order.address %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                    R$ <%= sprintf("%.2f", order.total/100.0) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
+                      Pending
+                    </span>
                   </td>
                 </tr>
               <% end %>
             </tbody>
           </table>
-          <%== pagy_nav(@not_fulfilled_pagy) %>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="flex flex-col w-full md:w-2/3">
-  <div class=" sm:mx-0.5 lg:mx-0.5 ">
-    <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-      <div class="">
-        <div class="flex items-center justify-center">
-          <h1 class="flex font-bold text-4xl text-white p-4 "> Fulfilled Orders</h1>
-        </div>
-        <div class="flex flex-col w-full md:w-2/3">
-          <div class=" sm:mx-0.5 lg:mx-0.5 ">
-            <div class="p-2 inline-block min-w-full border-3 border-(--cor-logo) bg-(--cor-logo) rounded-xl mt-12">
-              <div class="">
-                <table class="min-w-full ">
-                  <thead class="bg-white rounded border-b">
-                    <tr>
-                      <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                        Order ID
-                      </th>
-                      <th  scope="col" class=" bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                        Customer Email
-                      </th>
-                      <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                        Address
-                      </th>
-                      <th  scope="col" class="bg-(--cor-logo) text-sm font-medium text-gray-50  px-6 py-4 text-left">
-                        Total
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% @fulfilled_orders.each do |o| %>
-                      <tr class="bg-gray-50 border-b">
-                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800 underline">
-                          <%= link_to o.id, [:admin, o], class:"underline"%>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                          <%= o.customer_email %>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                          <%= o.address %>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium text-gray-800">
-                          R$<%= (o.total/100.0).to_s %>
-                        </td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-                <%== pagy_nav(@fulfilled_pagy) %>
-              </div>
+        <!-- Pagination for Pending Orders -->
+        <% if @not_fulfilled_pagy.pages > 1 %>
+          <div class="px-2 py-4 border-t border-gray-200 bg-gray-50">
+            <div class="flex justify-center">
+              <%== pagy_nav_compact(@not_fulfilled_pagy) %>
             </div>
           </div>
-        </div>
+        <% end %>
       </div>
-    </div>
+    <% else %>
+      <div class="text-center py-12 bg-white rounded-lg shadow">
+        <p class="text-gray-500 text-lg">No pending orders found.</p>
+      </div>
+    <% end %>
+  </div>
+  <!-- Fulfilled Orders Section -->
+  <div class="mb-12">
+    <h2 class="font-bold text-2xl text-(--cor-logo) mb-6">Fulfilled Orders</h2>
+    <% if @fulfilled_orders.any? %>
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <!-- Mobile Cards (visible on small/medium screens) -->
+        <div class="admin-table-mobile xl:hidden">
+          <% @fulfilled_orders.each do |order| %>
+            <div class="mobile-card border-b border-gray-200 p-3">
+              <div class="flex flex-col space-y-2">
+                <!-- Order ID -->
+                <h3 class="text-base font-semibold text-gray-900">
+                  <%= link_to "##{order.id}", [:admin, order], class: "hover:text-(--cor-logo) underline" %>
+                </h3>
+                <!-- Customer Email -->
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">Email:</span> <%= order.customer_email %>
+                </p>
+                <!-- Items -->
+                <div class="text-sm text-gray-600">
+                  <span class="font-medium">Items:</span>
+                  <% if order.order_products.any? %>
+                    <div class="mt-1 space-y-1">
+                      <% order.order_products.limit(2).each do |op| %>
+                        <div class="text-xs bg-gray-100 rounded px-2 py-1">
+                          <%= op.product.name %> (Size: <%= op.size %>, Qty: <%= op.quantity %>)
+                        </div>
+                      <% end %>
+                      <% if order.order_products.count > 2 %>
+                        <div class="text-xs text-gray-500">
+                          +<%= order.order_products.count - 2 %> more items
+                        </div>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <span class="text-gray-400">No items</span>
+                  <% end %>
+                </div>
+                <!-- Address (truncated for mobile) -->
+                <p class="text-sm text-gray-600 line-clamp-2 leading-tight">
+                  <span class="font-medium">Address:</span> <%= truncate(order.address, length: 60) %>
+                </p>
+                <!-- Total and Status -->
+                <div class="flex justify-between items-center pt-1">
+                  <span class="text-xs text-white bg-green-500 px-2 py-1 rounded-full">
+                    Fulfilled
+                  </span>
+                  <span class="text-sm font-bold text-green-600">
+                    R$ <%= sprintf("%.2f", order.total/100.0) %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <!-- Desktop Table (visible on extra large screens) -->
+        <div class="admin-table-desktop hidden xl:block overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-(--cor-logo)">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Order ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Customer Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Items</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Address</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Total</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @fulfilled_orders.each do |order| %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%= link_to "##{order.id}", [:admin, order], class: "text-(--cor-logo) hover:text-(--cor-logo-hover) underline" %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= order.customer_email %>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs">
+                    <% if order.order_products.any? %>
+                      <div class="space-y-1">
+                        <% order.order_products.limit(3).each do |op| %>
+                          <div class="text-xs bg-gray-100 rounded px-2 py-1">
+                            <span class="font-medium"><%= op.product.name %></span><br>
+                            Size: <%= op.size %>, Qty: <%= op.quantity %>
+                          </div>
+                        <% end %>
+                        <% if order.order_products.count > 3 %>
+                          <div class="text-xs text-gray-500">
+                            +<%= order.order_products.count - 3 %> more items
+                          </div>
+                        <% end %>
+                      </div>
+                    <% else %>
+                      <span class="text-gray-400">No items</span>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                    <%= order.address %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                    R$ <%= sprintf("%.2f", order.total/100.0) %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                      Fulfilled
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <!-- Pagination for Fulfilled Orders -->
+        <% if @fulfilled_pagy.pages > 1 %>
+          <div class="px-2 py-4 border-t border-gray-200 bg-gray-50">
+            <div class="flex justify-center">
+              <%== pagy_nav_compact(@fulfilled_pagy) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-12 bg-white rounded-lg shadow">
+        <p class="text-gray-500 text-lg">No fulfilled orders found.</p>
+      </div>
+    <% end %>
   </div>
 </div>

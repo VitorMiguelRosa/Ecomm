@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   namespace :admin do
+    resources :testimonials
     resources :orders
     resources :products do
       resources :stocks
@@ -24,5 +25,6 @@ Rails.application.routes.draw do
   post "checkout" => "checkouts#create"
   get "success" => "checkouts#success"
   get "cancel" => "checkouts#cancel"
+  get "checkouts/calcular_frete" => "checkouts#calcular_frete"
   post "webhook" => "webhooks#stripe"
 end

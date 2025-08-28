@@ -1,4 +1,4 @@
-<nav class="fixed w-full top-0 bg-[var(--cor-logo)] z-10 py-4 sm:px-6 lg:px-8">
+<nav class="fixed w-full top-0 bg-[var(--cor-logo)] z-50 py-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between relative h-16 px-4 lg:px-0">
       <!-- Left side -->
@@ -8,10 +8,10 @@
       <!-- Center logo -->
       <div class="flex-shrink-0 flex items-center">
         <%= link_to root_path do %>
-          <%= image_tag 'minhalogo.png', class: 'block lg:hidden h-20 w-auto' %>
+          <%= image_tag '/bambinilogo.png', class: 'block lg:hidden h-20 w-auto' %>
         <% end %>
         <%= link_to root_path do %>
-          <%= image_tag 'minhalogo.png', class: 'hidden lg:block h-20 w-auto' %>
+          <%= image_tag '/bambinilogo.png', class: 'hidden lg:block h-20 w-auto' %>
         <% end %>
       </div>
       <!-- Right side -->
@@ -22,5 +22,4 @@
       </div>
     </div>
   </div>
-</div>
 </nav>

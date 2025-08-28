@@ -82,3 +82,5 @@ gem "stripe", "~> 15.4"
 gem "pagy", "~> 9.3"
 
 gem 'cloudinary'
+
+gem 'correios-frete', '~> 1.13'
